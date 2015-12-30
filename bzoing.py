@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+from gi.repository import Gtk
 
+NORMAL_ICON = 'icons/bzoing.png'
 
 class Task:
     """
@@ -63,21 +65,80 @@ class TaskList:
             print task.get_task_id(), task.get_creation_date(), task.get_task_desc(), task.get_alarm()
         print "-----------------"
 
+    def get_list(self):
+        return self.task_list
 
-tarefa = Task(0, "Comprar Leite")
-tarefa.set_task_desc("Lavar a loiça")
-tarefa2 = Task(1, "Comprar tabaco")
+class MyBzoing(Gtk.Window):
 
-lista = TaskList()
-lista.add_task(tarefa)
-lista.add_task(tarefa2)
-lista.show_list()
-lista.remove_task(0)
-lista.show_list()
-# data = datetime.datetime(2015,12,29, 11,19,00,0)
-# while True:
-#     if datetime.datetime.now() == data:
-#         print "Bzooooooing!"
-#         break
+    def __init__(self):
+
+        tarefas = cria_tarefas()
+        my_list_of_tasks = cria_lista(tarefas)
+
+        Gtk.Window.__init__(self, title="Bzoing")
+        self.box = Gtk.Box(spacing=6)
+        self.add(self.box)
+
+        for tarefa in my_list_of_tasks.get_list():
+            # this is temporarily wrong, a dictionary or a list of objects must be created
+            self.label = Gtk.Label()
+            self.label.set_label(tarefa.get_task_desc())
+            self.label.set_halign(Gtk.Align.END)
+
+        self.my_status_icon = Gtk.StatusIcon()
+        self.my_status_icon.set_from_icon_name("owncloud")
 
 
+
+        self.box.add(self.label)
+
+def cria_tarefas():
+    """
+    Creates two sample tasks for testing purposes
+    :return: a list with two tasks
+    """
+    tarefa1 = Task(0, "Comprar Leite")
+    tarefa1.set_task_desc("Lavar a loiça")
+    tarefa2 = Task(1, "Comprar tabaco")
+    return [tarefa1, tarefa2]
+
+def cria_lista(tarefas):
+    """
+    Creates a list of tasks for testing purposes
+    :param tarefas: a list of tasks
+    :return: a Tasklist object
+    """
+    lista = TaskList()
+
+    for tarefa in tarefas:
+        lista.add_task(tarefa)
+
+    # Show the list of tasks in the console
+    lista.show_list()
+
+    return lista
+
+    # uncomment the following 2 lines to test removing a task
+    # lista.remove_task(0)
+    # lista.show_list()
+
+
+def main():
+    win = MyBzoing()
+    win.connect("destroy", destroy)
+    win.show_all()
+    Gtk.main()
+
+
+def destroy(window):
+    Gtk.main_quit()
+
+if __name__ == "__main__":
+    main()
+
+# some testing here
+# data = datetime.datetime(2015,12,29, 15,30,00,0)
+    # while True:
+    #     if datetime.datetime.now() == data:
+    #         print "Bzooooooing!"
+    #         break
