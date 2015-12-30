@@ -77,20 +77,20 @@ class MyBzoing(Gtk.Window):
 
         Gtk.Window.__init__(self, title="Bzoing")
         self.box = Gtk.Box(spacing=6)
+        self.box.set_orientation(Gtk.Orientation.VERTICAL)
         self.add(self.box)
 
+        list_of_gtk_labels = []
+
         for tarefa in my_list_of_tasks.get_list():
-            # this is temporarily wrong, a dictionary or a list of objects must be created
-            self.label = Gtk.Label()
-            self.label.set_label(tarefa.get_task_desc())
-            self.label.set_halign(Gtk.Align.END)
+            # creates one Gtk.Label for each item in the list_of_tasks
+            list_of_gtk_labels.append(Gtk.Label(tarefa.get_task_desc()))
 
-        self.my_status_icon = Gtk.StatusIcon()
-        self.my_status_icon.set_from_icon_name("owncloud")
+        #self.my_status_icon = Gtk.StatusIcon()
+        #self.my_status_icon.set_from_icon_name("owncloud")
 
-
-
-        self.box.add(self.label)
+        for label in list_of_gtk_labels:
+            self.box.add(label)
 
 def cria_tarefas():
     """
@@ -126,6 +126,8 @@ def cria_lista(tarefas):
 def main():
     win = MyBzoing()
     win.connect("destroy", destroy)
+    win.set_default_size(300, 300)
+    win.set_position(Gtk.WindowPosition.CENTER)
     win.show_all()
     Gtk.main()
 
