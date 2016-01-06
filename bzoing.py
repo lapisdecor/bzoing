@@ -1,146 +1,146 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
-import datetime
+import os
+import signal
 from gi.repository import Gtk
+from gi.repository import AppIndicator3 as appindicator
 
-NORMAL_ICON = 'icons/bzoing.png'
+import tasks
 
-class Task:
-    """
-    Defines a task with id, description, creation time and alarm
-    """
-    def __init__(self, task_id, task_desc):
-        self.task_id = task_id
-        self.task_desc = task_desc
-        self.alarm = False
-        self.date_created = datetime.datetime.now()
-        self.alarm_date = None
-
-    def set_task_desc(self, task_desc):
-        self.taskDesc = task_desc
-
-    def get_task_id(self):
-        return self.task_id
-
-    def get_task_desc(self):
-        return self.task_desc
-
-    def get_creation_date(self):
-        return self.date_created
-
-    def alarm_on(self):
-        self.alarm = True
-
-    def alarm_off(self):
-        self.alarm = False
-
-    def set_alarm(self, date):
-        assert isinstance(date, datetime)
-        self.alarm_date = date
-        self.alarm_on()
-
-    def get_alarm(self):
-        if self.alarm:
-            return "Alarm On"
-        return "Alarm Off"
+APPINDICATOR_ID = 'bzoing'
 
 
-class TaskList:
-    """
-    Defines a list of tasks
-    """
+class MyBzoing:
     def __init__(self):
         self.task_list = []
+        indicator = appindicator.Indicator.new(APPINDICATOR_ID,
+                                           os.path.abspath('sinoamarelo.svg'),
+                                           appindicator.IndicatorCategory.APPLICATION_STATUS)
+        indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        indicator.set_menu(self.build_menu())
+        Gtk.main()
 
-    def add_task(self, task):
-        self.task_list.append(task)
+    def build_menu(self):
+        """
+        Builds all the menus
+        :rtype: object
+        """
+        menu = Gtk.Menu()
+        item_new_task = Gtk.MenuItem('New task')
+        item_new_task.connect('activate', self.new_task)
+        menu.append(item_new_task)
 
-    def remove_task(self, task_id):
-        for task in self.task_list:
-            if task.get_task_id() == task_id:
-                self.task_list.remove(task)
+        item_see_tasks = Gtk.MenuItem('See tasks')
+        item_see_tasks.connect('activate', self.see_tasks)
+        menu.append(item_see_tasks)
 
-    def show_list(self):
-        for task in self.task_list:
-            print task.get_task_id(), task.get_creation_date(), task.get_task_desc(), task.get_alarm()
-        print "-----------------"
+        item_separator = Gtk.SeparatorMenuItem()
+        menu.append(item_separator)
 
-    def get_list(self):
-        return self.task_list
+        item_stop_alarms = Gtk.MenuItem('Stop Alarms')
+        item_stop_alarms.connect('activate', self.stop_alarms)
+        menu.append(item_stop_alarms)
 
-class MyBzoing(Gtk.Window):
+        item_quit = Gtk.MenuItem('Quit')
+        item_quit.connect('activate', self.quit)
+        menu.append(item_quit)
 
-    def __init__(self):
+        menu.show_all()
+        return menu
 
-        tarefas = cria_tarefas()
-        my_list_of_tasks = cria_lista(tarefas)
+    def new_task(self, _):
+        window_task = Gtk.Window(title='Create Task')
+        window_task.connect('destroy', self.quit_window)
 
-        Gtk.Window.__init__(self, title="Bzoing")
-        self.box = Gtk.Box(spacing=6)
-        self.box.set_orientation(Gtk.Orientation.VERTICAL)
-        self.add(self.box)
+        vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+        hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 6)
+
+        task_label = Gtk.Label()
+        task_label.set_text('Task: ')
+        hbox.pack_start(task_label, False, False, 2)
+
+        task_field = Gtk.Entry()
+        hbox.pack_start(task_field, False, False, 2)
+
+        vbox.pack_start(hbox, False, False, 6)
+
+        button_alarm = Gtk.Button()
+        button_alarm.set_label("Alarm")
+        button_alarm.connect("clicked", self.on_alarm_clicked)
+        vbox.pack_start(button_alarm, False, False, 2)
+
+        button_ok = Gtk.Button()
+        button_ok.set_label("Ok")
+        passvalues = [window_task, task_field]
+        button_ok.connect("clicked", self.on_task_ok, passvalues)
+        vbox.pack_start(button_ok, 0, 0, 2)
+
+        window_task.add(vbox)
+        window_task.show_all()
+
+        return window_task
+
+    def see_tasks(self, _):
+        """
+        Shows a window with all the tasks and alarms
+        :param _:
+        :return:
+        """
+        window = Gtk.Window(title="List of tasks")
+        box = Gtk.Box(spacing=6)
+        box.set_orientation(Gtk.Orientation.VERTICAL)
+        window.add(box)
 
         list_of_gtk_labels = []
 
-        for tarefa in my_list_of_tasks.get_list():
+        for each_task in self.task_list:
             # creates one Gtk.Label for each item in the list_of_tasks
-            list_of_gtk_labels.append(Gtk.Label(tarefa.get_task_desc()))
-
-        #self.my_status_icon = Gtk.StatusIcon()
-        #self.my_status_icon.set_from_icon_name("owncloud")
+            list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
 
         for label in list_of_gtk_labels:
-            self.box.add(label)
+            box.pack_start(label)
 
-def cria_tarefas():
-    """
-    Creates two sample tasks for testing purposes
-    :return: a list with two tasks
-    """
-    tarefa1 = Task(0, "Comprar Leite")
-    tarefa1.set_task_desc("Lavar a loiça")
-    tarefa2 = Task(1, "Comprar tabaco")
-    return [tarefa1, tarefa2]
+        window.show_all()
 
-def cria_lista(tarefas):
-    """
-    Creates a list of tasks for testing purposes
-    :param tarefas: a list of tasks
-    :return: a Tasklist object
-    """
-    lista = TaskList()
 
-    for tarefa in tarefas:
-        lista.add_task(tarefa)
 
-    # Show the list of tasks in the console
-    lista.show_list()
+    def stop_alarms(self, _):
+        """
+        Stops all playing alarms
+        :param _:
+        :return:
+        """
+        pass
 
-    return lista
+    def on_alarm_clicked(self, _):
+        """
+        Shows a window to define the alarm
+        :param _:
+        :return: datetime object
+        """
+        window_alarm = Gtk.Window(title="Define alarm")
+        # TODO show calendar and time fields and start alarm (implement alarm using threading?)
+        alarm = 0
+        window_alarm.show_all()
+        return alarm
 
-    # uncomment the following 2 lines to test removing a task
-    # lista.remove_task(0)
-    # lista.show_list()
+    def on_task_ok(self, widget, passvalues):
+        print(passvalues[1].get_text())
+        # TODO implement create task from task data
+        # add_task(data)
+        # TODO update task list window
+        passvalues[0].destroy()
+
+    def quit_window(self,window):
+        window.destroy()
+
+    def quit(self, widget):
+        Gtk.main_quit()
 
 
 def main():
-    win = MyBzoing()
-    win.connect("destroy", destroy)
-    win.set_default_size(300, 300)
-    win.set_position(Gtk.WindowPosition.CENTER)
-    win.show_all()
-    Gtk.main()
-
-
-def destroy(window):
-    Gtk.main_quit()
+    app = MyBzoing()
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     main()
-
-# some testing here
-# data = datetime.datetime(2015,12,29, 15,30,00,0)
-    # while True:
-    #     if datetime.datetime.now() == data:
-    #         print "Bzooooooing!"
-    #         break

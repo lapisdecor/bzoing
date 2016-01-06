@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="16.91243mm"
+   height="16.904112mm"
+   viewBox="0 0 59.925932 59.896459"
+   id="svg3359"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="sinoamarelo.svg">
+  <defs
+     id="defs3361" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="13.873942"
+     inkscape:cx="29.962966"
+     inkscape:cy="29.94823"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="1000"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     fit-margin-top="5"
+     fit-margin-right="5"
+     fit-margin-left="5"
+     fit-margin-bottom="5" />
+  <metadata
+     id="metadata3364">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Camada 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-348.39576,-337.25756)">
+    <ellipse
+       transform="matrix(0.85651878,0.51611585,-0.57610759,0.81737387,0,0)"
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.18536854;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle3756"
+       cx="523.4765"
+       cy="139.24001"
+       rx="5.0493689"
+       ry="4.8923445" />
+    <path
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.18384707;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 354.37848,364.82448 c 0.91293,-2.26541 4.56724,-0.2233 6.60872,-1.27288 4.49953,-0.68626 8.64898,-2.96145 11.40614,-6.3238 3.97525,-3.98218 7.56716,-8.89232 13.39688,-10.65052 3.4105,-0.84047 7.16073,-0.43862 10.35769,0.8835 2.86929,1.71961 4.46577,4.76665 5.49184,7.67925 1.32272,5.50472 -1.9209,10.66953 -4.28166,15.50954 -1.95887,3.55672 -3.53654,7.56632 -2.62374,11.60527 0.41154,2.53307 1.2932,5.01775 2.73153,7.21459 -1.21424,1.68336 -1.36191,1.12814 -7.8236,0.62417 -16.03564,-1.52912 -30.97279,-12.92127 -35.2638,-25.26912 z"
+       id="path3760"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccc" />
+    <path
+       style="fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.98653919;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 355.99418,363.63053 c 5.44619,14.45934 21.24168,24.70242 40.98827,25.19562"
+       id="path3762"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
+    <ellipse
+       transform="matrix(0.85651878,0.51611585,-0.57610759,0.81737387,0,0)"
+       cy="92.092201"
+       cx="525.89771"
+       id="circle3764"
+       style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.18536854;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       rx="3.1036735"
+       ry="3.0071557" />
+  </g>
+</svg>
