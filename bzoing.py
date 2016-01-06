@@ -13,6 +13,7 @@ APPINDICATOR_ID = 'bzoing'
 class MyBzoing:
     def __init__(self):
         self.task_list = []
+        self.tasklist_id = -1
         indicator = appindicator.Indicator.new(APPINDICATOR_ID,
                                            os.path.abspath('sinoamarelo.svg'),
                                            appindicator.IndicatorCategory.APPLICATION_STATUS)
@@ -98,7 +99,7 @@ class MyBzoing:
             list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
 
         for label in list_of_gtk_labels:
-            box.pack_start(label)
+            box.pack_start(label, 0, 0, 2)
 
         window.show_all()
 
@@ -125,10 +126,15 @@ class MyBzoing:
         return alarm
 
     def on_task_ok(self, widget, passvalues):
-        print(passvalues[1].get_text())
-        # TODO implement create task from task data
-        # add_task(data)
-        # TODO update task list window
+        self.tasklist_id += 1
+
+        # create task from task data
+        new_task = tasks.Task(self.tasklist_id, passvalues[1].get_text())
+        self.task_list.append(new_task)
+
+        # TODO update task list window if open
+
+        # close new task window
         passvalues[0].destroy()
 
     def quit_window(self,window):
