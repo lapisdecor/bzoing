@@ -14,6 +14,7 @@ class MyBzoing:
     def __init__(self):
         self.task_list = []
         self.tasklist_id = -1
+        self.task_window_open = False
         indicator = appindicator.Indicator.new(APPINDICATOR_ID,
                                            os.path.abspath('sinoamarelo.svg'),
                                            appindicator.IndicatorCategory.APPLICATION_STATUS)
@@ -87,21 +88,24 @@ class MyBzoing:
         :param _:
         :return:
         """
-        window = Gtk.Window(title="List of tasks")
-        box = Gtk.Box(spacing=6)
-        box.set_orientation(Gtk.Orientation.VERTICAL)
-        window.add(box)
+        if self.task_window_open == False:
+            self.task_window_open = True
+            window = Gtk.Window(title="List of tasks")
+            window.connect('destroy', self.quit_listview_window)
+            box = Gtk.Box(spacing=6)
+            box.set_orientation(Gtk.Orientation.VERTICAL)
+            window.add(box)
 
-        list_of_gtk_labels = []
+            list_of_gtk_labels = []
 
-        for each_task in self.task_list:
-            # creates one Gtk.Label for each item in the list_of_tasks
-            list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
+            for each_task in self.task_list:
+                # creates one Gtk.Label for each item in the list_of_tasks
+                list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
 
-        for label in list_of_gtk_labels:
-            box.pack_start(label, 0, 0, 2)
+            for label in list_of_gtk_labels:
+                box.pack_start(label, 0, 0, 2)
 
-        window.show_all()
+            window.show_all()
 
 
 
@@ -136,6 +140,10 @@ class MyBzoing:
 
         # close new task window
         passvalues[0].destroy()
+
+    def quit_listview_window(self, window):
+        self.task_window_open = False
+        window.destroy()
 
     def quit_window(self,window):
         window.destroy()
