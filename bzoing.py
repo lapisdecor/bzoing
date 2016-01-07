@@ -16,10 +16,11 @@ class MyBzoing:
         self.tasklist_id = -1
         self.task_window_open = False
         indicator = appindicator.Indicator.new(APPINDICATOR_ID,
-                                           os.path.abspath('sinoamarelo.svg'),
-                                           appindicator.IndicatorCategory.APPLICATION_STATUS)
+                                               os.path.abspath('sinoamarelo.svg'),
+                                               appindicator.IndicatorCategory.APPLICATION_STATUS)
         indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         indicator.set_menu(self.build_menu())
+        # TODO retrieve saved tasks from file
         Gtk.main()
 
     def build_menu(self):
@@ -51,6 +52,11 @@ class MyBzoing:
         return menu
 
     def new_task(self, _):
+        """
+        Creates new task window
+        :param _:
+        :return: Gtk.Window object
+        """
         window_task = Gtk.Window(title='Create Task')
         window_task.connect('destroy', self.quit_window)
 
@@ -88,10 +94,12 @@ class MyBzoing:
         :param _:
         :return:
         """
-        if self.task_window_open == False:
+        if self.task_window_open is False:
             self.task_window_open = True
             window = Gtk.Window(title="List of tasks")
             window.connect('destroy', self.quit_listview_window)
+            window.set_size_request(320, 240)
+
             box = Gtk.Box(spacing=6)
             box.set_orientation(Gtk.Orientation.VERTICAL)
             window.add(box)
@@ -106,8 +114,6 @@ class MyBzoing:
                 box.pack_start(label, 0, 0, 2)
 
             window.show_all()
-
-
 
     def stop_alarms(self, _):
         """
@@ -145,10 +151,11 @@ class MyBzoing:
         self.task_window_open = False
         window.destroy()
 
-    def quit_window(self,window):
+    def quit_window(self, window):
         window.destroy()
 
     def quit(self, widget):
+        # TODO save tasks to file
         Gtk.main_quit()
 
 
