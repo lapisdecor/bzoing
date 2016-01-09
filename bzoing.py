@@ -58,6 +58,7 @@ class MyBzoing:
         :return: Gtk.Window object
         """
         window_task = Gtk.Window(title='Create Task')
+        window_task.set_border_width(10)
         window_task.connect('destroy', self.quit_window)
 
         vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
@@ -99,6 +100,7 @@ class MyBzoing:
             window = Gtk.Window(title="List of tasks")
             window.connect('destroy', self.quit_listview_window)
             window.set_size_request(320, 240)
+            window.set_border_width(10)
 
             box = Gtk.Box(spacing=6)
             box.set_orientation(Gtk.Orientation.VERTICAL)
