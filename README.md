@@ -8,5 +8,5 @@ If you want to see what is done so far, just clone the repository, open a termin
 
 `./bzoing.py`
 
-
+You should see a yellow bell on your system tray.
 
