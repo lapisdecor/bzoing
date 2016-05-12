@@ -2,7 +2,12 @@
 
 import os
 import signal
+import gi
+
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
+gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 
 import tasks
@@ -132,7 +137,35 @@ class MyBzoing:
         :return: datetime object
         """
         window_alarm = Gtk.Window(title="Define alarm")
-        # TODO show calendar and time fields and start alarm (implement alarm using threading?)
+        # show calendar and time fields and start alarm (implement alarm using threading?)
+        cal_box = Gtk.Box(spacing=6)
+        cal_box.set_orientation(Gtk.Orientation.VERTICAL)
+        cal_box.set_border_width(10)
+
+        cal = Gtk.Calendar()
+        cal_box.add(cal)
+        window_alarm.add(cal_box)
+
+        time_hbox = Gtk.HBox()
+        hour_adjustment = Gtk.Adjustment(00, 00, 23, 1, 10, 0)
+        minute_adjustment = Gtk.Adjustment(00, 00, 59, 1, 10, 0)
+        hours_field = Gtk.SpinButton()
+        minutes_field = Gtk.SpinButton()
+
+        hours_field.set_adjustment(hour_adjustment)
+        minutes_field.set_adjustment(minute_adjustment)
+
+        time_sep_label = Gtk.Label()
+        time_sep_label.set_text(' : ')
+
+        time_hbox.add(hours_field)
+        time_hbox.add(time_sep_label)
+        time_hbox.add(minutes_field)
+
+        cal_box.add(time_hbox)
+        time_ok_btn = Gtk.Button("OK")
+        cal_box.add(time_ok_btn)
+
         alarm = 0
         window_alarm.show_all()
         return alarm
