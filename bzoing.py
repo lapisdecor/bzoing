@@ -3,6 +3,7 @@
 import os
 import signal
 import gi
+import datetime
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
@@ -132,20 +133,22 @@ class MyBzoing:
 
     def on_alarm_clicked(self, _):
         """
-        Shows a window to define the alarm
+        Shows a window with a calendar to define the alarm
         :param _:
         :return: datetime object
         """
         window_alarm = Gtk.Window(title="Define alarm")
-        # show calendar and time fields and start alarm (implement alarm using threading?)
+        # create a box to put fields
         cal_box = Gtk.Box(spacing=6)
         cal_box.set_orientation(Gtk.Orientation.VERTICAL)
         cal_box.set_border_width(10)
 
+        # create a calendar
         cal = Gtk.Calendar()
         cal_box.add(cal)
         window_alarm.add(cal_box)
 
+        # create the SpinButtons for alarm time
         time_hbox = Gtk.HBox()
         hour_adjustment = Gtk.Adjustment(00, 00, 23, 1, 10, 0)
         minute_adjustment = Gtk.Adjustment(00, 00, 59, 1, 10, 0)
@@ -155,20 +158,52 @@ class MyBzoing:
         hours_field.set_adjustment(hour_adjustment)
         minutes_field.set_adjustment(minute_adjustment)
 
+        # creates a : separator between the two SpinButtons
         time_sep_label = Gtk.Label()
         time_sep_label.set_text(' : ')
 
+        # add time fields to the box
         time_hbox.add(hours_field)
         time_hbox.add(time_sep_label)
         time_hbox.add(minutes_field)
 
+        # add time box to calendar box
         cal_box.add(time_hbox)
+
+        # create a OK button
         time_ok_btn = Gtk.Button("OK")
         cal_box.add(time_ok_btn)
 
-        alarm = 0
+        # create signal for OK Button
+        time_ok_btn.connect("clicked", self.register_alarm, (cal, hours_field, minutes_field, window_alarm))
         window_alarm.show_all()
-        return alarm
+
+
+    def register_alarm(self, _, data):
+        """
+        Gets date from calendar and time from SpinButtons
+        and returns a datetime object
+        """
+        # get date in the form (year=2016, month=4, day=12)
+        alarm_year  = data[0].get_date()[0]
+        alarm_month = data[0].get_date()[1] + 1
+        alarm_day   = data[0].get_date()[2]
+
+        # get time
+        alarm_hour   = int(data[1].get_text())
+        alarm_minute = int(data[2].get_text())
+
+        # create datetime object
+        #print(alarm_year, alarm_month, alarm_day, "@", alarm_hour, ":", alarm_minute)
+        self.alarm = datetime.datetime(alarm_year, alarm_month, alarm_day, alarm_hour, alarm_minute)
+
+        data[3].destroy()
+
+
+
+
+
+
 
     def on_task_ok(self, widget, passvalues):
         self.tasklist_id += 1
