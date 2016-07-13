@@ -1,0 +1,129 @@
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+import alarmdialog
+import datetime
+import tasks
+
+class TaskWindow(Gtk.Window):
+    def __init__(self, parent):
+        Gtk.Window.__init__(self)
+        self.parent = parent
+        self.task_desc = None
+        self.alarm_time = None
+        self.title='Create Task'
+        self.set_border_width(10)
+        self.connect('destroy', self.quit_window)
+
+        # create box to hold the buttons etc.
+        vbox = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
+        hbox = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 6)
+
+        # create a label
+        task_label = Gtk.Label()
+        task_label.set_text('Task: ')
+        hbox.pack_start(task_label, False, False, 2)
+
+        # create a field to input the task description
+        task_field = Gtk.Entry()
+        hbox.pack_start(task_field, False, False, 2)
+
+        vbox.pack_start(hbox, False, False, 6)
+
+        # create the Alarm button
+        button_alarm = Gtk.Button()
+        button_alarm.set_label("Alarm")
+        button_alarm.connect("clicked", self.button_alarm_clicked)
+        vbox.pack_start(button_alarm, False, False, 2)
+
+        # create the OK button
+        button_ok = Gtk.Button()
+        button_ok.set_label("OK")
+        button_ok.connect("clicked", self.task_ok_clicked, task_field)
+        vbox.pack_start(button_ok, 0, 0, 2)
+
+        self.add(vbox)
+        self.show_all()
+
+    def get_task_desc(self):
+        """
+        Returns description of the task from TaskWindow
+        """
+        return self.task_desc
+
+    def get_alarm(self):
+        """
+        Returns the alarm time for the current task from TaskWindow
+        """
+        return self.alarm_time
+
+    def quit_window(self, window):
+        """
+        Quits the TaskWindow
+        """
+        window.destroy()
+
+    def button_alarm_clicked(self, button):
+        """
+        Creates the Alarm Dialog and stores the date and the time
+        in the TaskWindow object
+        """
+        my_alarm = alarmdialog.AlarmDialog(self)
+        response = my_alarm.run()
+        if response == Gtk.ResponseType.OK:
+            print("OK")
+            d = my_alarm.cal
+            my_date = d.get_date()
+            print("the date is ", my_date)
+            h = my_alarm.hours_field
+            hours = h.get_text()
+            m = my_alarm.minutes_field
+            minutes = m.get_text()
+            print("The time is {0:02d}:{1:02d}".format(int(hours), int(minutes)))
+            self.alarm_time = datetime.datetime(my_date.year,
+                                               my_date.month,
+                                               my_date.day,
+                                               int(hours),
+                                               int(minutes))
+        elif response == Gtk.ResponseType.CANCEL:
+            print("Cancel was pressed")
+
+        my_alarm.destroy()
+
+
+    def task_ok_clicked(self, widget, task_field):
+        """
+        Stores the descrition of the task on the TaskWindow object
+        """
+        self.task_desc = task_field.get_text()
+
+        # gets task description
+        desc = self.task_desc
+
+        # creates task if task was entered
+        if desc != None and desc != "":
+            # creates a new task_id
+            self.parent.task_id += 1
+
+            # gets alarm time
+            alarm_time = self.get_alarm()
+
+            # creates new task
+            new_task = tasks.Task(self.parent.task_id, desc)
+
+            # sets alarm if an alarm was defined
+            if alarm_time != None:
+                # sets the alarm on the new task
+                new_task.set_alarm(alarm_time)
+                print("alarm is not None, alarm is set to ", alarm_time)
+            else:
+                print("No Alarm!")
+
+            # appends task to task list
+            self.parent.task_list.append(new_task)
+
+            # run alarm process
+            # TODO
+
+        self.destroy()
