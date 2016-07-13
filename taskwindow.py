@@ -94,7 +94,7 @@ class TaskWindow(Gtk.Window):
 
     def task_ok_clicked(self, widget, task_field):
         """
-        Stores the descrition of the task on the TaskWindow object
+        Creates a task and the task alarm
         """
         self.task_desc = task_field.get_text()
 
