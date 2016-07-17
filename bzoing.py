@@ -2,8 +2,10 @@
 
 import os
 import signal
-import gi
 import datetime
+import time
+import gi
+from threading import Thread, Lock
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
