@@ -21,7 +21,6 @@ class TaskListWindow(Gtk.Window):
         for each_task in self.this_list:
             # creates one Gtk.Label for each item in the list_of_tasks
             list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
-            print(each_task.get_task_desc)
 
         for label in list_of_gtk_labels:
             box.pack_start(label, 0, 0, 2)

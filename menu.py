@@ -4,7 +4,9 @@ from gi.repository import Gtk
 
 import taskwindow
 import tasklistwindow
-#import tasks
+#import threading
+import config
+
 
 class BzoingMenu(Gtk.Menu):
     def __init__(self):
@@ -51,6 +53,8 @@ class BzoingMenu(Gtk.Menu):
         """
         pass
 
+
     def quit(self, widget):
         # TODO save tasks to file
+        config.can_quit = True
         Gtk.main_quit()
