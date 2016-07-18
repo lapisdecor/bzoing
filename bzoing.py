@@ -15,9 +15,8 @@ from gi.repository import AppIndicator3 as appindicator
 
 import config
 import menu
+import taskwindow
 
-
-list_of_alarms = []
 active_alarms = []
 thread_list = []
 tLock = Lock()
@@ -41,7 +40,7 @@ class MyBzoing:
 
 def new_alarm(name, num_seconds):
     time.sleep(num_seconds)
-    print("beep beep!!! {} is over".format(name))
+    print("beep beep!!! it's time to do {} ".format(name))
     # remove alarm from active_alarms
     with tLock:
         active_alarms.pop()
@@ -49,19 +48,39 @@ def new_alarm(name, num_seconds):
 def monitor():
     """monitors the list_of_alarms"""
     n = 0
+    today = datetime.datetime.now()
+    # TODO load the postphoned alarms from file and put them on list_of_alarms
+    # TODO if day has changed get from the waiting_list and put on the list_of_alarms
     while True:
         # get the new items in list_of_alarms
         # and start threads for them
-        if len(list_of_alarms) > 0:
-            # start thread for alarm
-            thread_list.append(Thread(target=new_alarm, args=(list_of_alarms[0])))
-            thread_list[-1].start()
-            # remove alarm from list_of_alarms and put it on active_alarms
-            with tLock:
-                a = list_of_alarms.pop(0)
-                active_alarms.append(a)
-            print("alarm {} was set to active".format(a))
-            print(list_of_alarms)
+        if len(config.list_of_alarms) > 0:
+            #print("list of alarms before pop = ", config.list_of_alarms)
+            # get alarm from list_of_alarms
+            a = config.list_of_alarms.pop(0)
+            #print("today = ", today)
+            #print("a = ", a)
+
+            # if the alarm is today calculate delta
+            if a.year == today.year and a.month == today.month and a.day == today.day:
+                print("it's today")
+                # check the time left until alarm sounds today
+                my_delta = (a - today).total_seconds()
+                print("alarm will sound in {0} seconds = ".format(my_delta))
+
+                # start thread for today alarm
+                thread_list.append(Thread(target=new_alarm, args=("for now", my_delta)))
+                thread_list[-1].start()
+                #print("thread_list = " , thread_list)
+
+                #  put it on active_alarms
+                with tLock:
+                    active_alarms.append(a)
+
+            # if the alarm is not today, postphone to a waiting list
+            else:
+                waiting_list.append(a)
+
 
         # check if computer was suspended
         current_time = datetime.datetime.now()
@@ -69,9 +88,12 @@ def monitor():
         new_time = datetime.datetime.now()
         if (new_time - current_time).total_seconds() > 5:
             print("computer has been suspended")
+            # TODO check due alarms
+            # TODO put stop active alarms and reput them on list_of_alarms
 
         # quit monitor
         if config.can_quit == True:
+            # TODO save the active and postphoned alarms
             print("Goodbye!")
             break
 

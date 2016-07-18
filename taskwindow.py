@@ -5,6 +5,10 @@ from gi.repository import Gtk
 import alarmdialog
 import datetime
 import tasks
+import config
+from threading import Lock
+
+tLock = Lock()
 
 class TaskWindow(Gtk.Window):
     def __init__(self, parent):
@@ -72,7 +76,6 @@ class TaskWindow(Gtk.Window):
         my_alarm = alarmdialog.AlarmDialog(self)
         response = my_alarm.run()
         if response == Gtk.ResponseType.OK:
-            print("OK")
             d = my_alarm.cal
             my_date = d.get_date()
             print("the date is ", my_date)
@@ -82,10 +85,11 @@ class TaskWindow(Gtk.Window):
             minutes = m.get_text()
             print("The time is {0:02d}:{1:02d}".format(int(hours), int(minutes)))
             self.alarm_time = datetime.datetime(my_date.year,
-                                               my_date.month,
+                                               my_date.month + 1,
                                                my_date.day,
                                                int(hours),
                                                int(minutes))
+
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel was pressed")
 
@@ -124,6 +128,8 @@ class TaskWindow(Gtk.Window):
             self.parent.task_list.append(new_task)
 
             # run alarm process
-            # TODO
+            # append list_of_alarms
+            with tLock:
+                config.list_of_alarms.append(self.alarm_time)
 
         self.destroy()
