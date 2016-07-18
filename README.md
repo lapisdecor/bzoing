@@ -7,7 +7,8 @@ Bzoing will provide a simple way to create task reminder alarms on your desktop 
 If you want to see what is done so far:
 
 1) install dependencies
-sudo apt install portaudio19-dev python-all-dev python-pyaudio python3-pyaudio
+
+**sudo apt install portaudio19-dev python-all-dev python-pyaudio python3-pyaudio**
 
 2) just clone the repository, open a terminal on the bzoing folder and type
 
