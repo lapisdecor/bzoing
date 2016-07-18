@@ -17,6 +17,7 @@ import config
 import menu
 import taskwindow
 import playme
+import subprocess
 
 active_alarms = []
 thread_list = []
@@ -39,9 +40,14 @@ class MyBzoing:
         # TODO retrieve saved tasks from file
         Gtk.main()
 
+def sendmessage(message):
+    subprocess.Popen(['notify-send', message])
+    return
+
 def new_alarm(name, num_seconds):
     time.sleep(num_seconds)
     print("beep beep!!! it's time to do {} ".format(name))
+    sendmessage("Its time for {}".format(name))
     # remove alarm from active_alarms
     with tLock:
         active_alarms.pop()
