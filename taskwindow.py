@@ -6,6 +6,7 @@ import alarmdialog
 import datetime
 import tasks
 import config
+import subprocess
 from threading import Lock
 
 tLock = Lock()
@@ -51,21 +52,15 @@ class TaskWindow(Gtk.Window):
         self.show_all()
 
     def get_task_desc(self):
-        """
-        Returns description of the task from TaskWindow
-        """
+        """Returns description of the task"""
         return self.task_desc
 
     def get_alarm(self):
-        """
-        Returns the alarm time for the current task from TaskWindow
-        """
+        """Returns the alarm time for the current task"""
         return self.alarm_time
 
     def quit_window(self, window):
-        """
-        Quits the TaskWindow
-        """
+        """Quits the TaskWindow"""
         window.destroy()
 
     def button_alarm_clicked(self, button):
@@ -76,23 +71,35 @@ class TaskWindow(Gtk.Window):
         my_alarm = alarmdialog.AlarmDialog(self)
         response = my_alarm.run()
         if response == Gtk.ResponseType.OK:
-            d = my_alarm.cal
+            d       = my_alarm.cal
             my_date = d.get_date()
-            h = my_alarm.hours_field
-            hours = h.get_text()
-            m = my_alarm.minutes_field
+            h       = my_alarm.hours_field
+            hours   = h.get_text()
+            m       = my_alarm.minutes_field
             minutes = m.get_text()
             #print("The time is {0:02d}:{1:02d}".format(int(hours), int(minutes)))
+
             self.alarm_time = datetime.datetime(my_date.year,
                                                my_date.month + 1,
                                                my_date.day,
                                                int(hours),
                                                int(minutes))
 
+            # if time not valid, forget the time with a notification
+            if self.alarm_time < datetime.datetime.now():
+                self.alarm_time = None
+                self.sendmessage("The alarm is in the past, please set it again.")
+
+
         elif response == Gtk.ResponseType.CANCEL:
             print("Cancel was pressed")
 
         my_alarm.destroy()
+
+
+    def sendmessage(self, message):
+        subprocess.Popen(['notify-send', message])
+        return
 
 
     def task_ok_clicked(self, widget, task_field):
@@ -104,8 +111,12 @@ class TaskWindow(Gtk.Window):
         # gets task description
         desc = self.task_desc
 
+        # inform that no description is entered
+        if desc == "":
+            self.sendmessage("No task description, create task again")
+
         # creates task if task was entered
-        if desc != None and desc != "":
+        elif desc != None and desc != "":
             # creates a new task_id
             self.parent.task_id += 1
 

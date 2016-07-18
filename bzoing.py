@@ -16,6 +16,7 @@ from gi.repository import AppIndicator3 as appindicator
 import config
 import menu
 import taskwindow
+import playme
 
 active_alarms = []
 thread_list = []
@@ -44,6 +45,9 @@ def new_alarm(name, num_seconds):
     # remove alarm from active_alarms
     with tLock:
         active_alarms.pop()
+    # play sound
+    my_sound = playme.Playme()
+    my_sound.play()
 
 def monitor():
     """monitors the list_of_alarms"""
@@ -68,7 +72,7 @@ def monitor():
                 and task_alarm.day == today.day:
                 print("it's today")
                 # check the time left until alarm sounds today
-                my_delta = (task_alarm - today).total_seconds()
+                my_delta = (task_alarm - datetime.datetime.now()).total_seconds()
                 print("Alarm will sound in {0} seconds".format(my_delta))
 
                 # start thread for today alarm

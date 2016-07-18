@@ -43,5 +43,5 @@ class AlarmDialog(Gtk.Dialog):
 
         self.show_all()
 
-    def get_alarm():
-        return self.alarm_time
+    #def get_alarm():
+    #    return self.alarm_time
