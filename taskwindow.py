@@ -78,12 +78,11 @@ class TaskWindow(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             d = my_alarm.cal
             my_date = d.get_date()
-            print("the date is ", my_date)
             h = my_alarm.hours_field
             hours = h.get_text()
             m = my_alarm.minutes_field
             minutes = m.get_text()
-            print("The time is {0:02d}:{1:02d}".format(int(hours), int(minutes)))
+            #print("The time is {0:02d}:{1:02d}".format(int(hours), int(minutes)))
             self.alarm_time = datetime.datetime(my_date.year,
                                                my_date.month + 1,
                                                my_date.day,
@@ -120,16 +119,17 @@ class TaskWindow(Gtk.Window):
             if alarm_time != None:
                 # sets the alarm on the new task
                 new_task.set_alarm(alarm_time)
-                print("alarm is not None, alarm is set to ", alarm_time)
+                print("Alarm is set to ", alarm_time)
             else:
-                print("No Alarm!")
+                print("New task '{}' created with no Alarm!".format(desc))
 
             # appends task to task list
             self.parent.task_list.append(new_task)
 
             # run alarm process
-            # append list_of_alarms
-            with tLock:
-                config.list_of_alarms.append(self.alarm_time)
+            # append list_of_alarms if alarm is set
+            if self.alarm_time != None:
+                with tLock:
+                    config.list_of_alarms.append((desc, self.alarm_time))
 
         self.destroy()

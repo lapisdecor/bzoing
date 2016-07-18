@@ -48,6 +48,7 @@ def new_alarm(name, num_seconds):
 def monitor():
     """monitors the list_of_alarms"""
     n = 0
+    waiting_list = []
     today = datetime.datetime.now()
     # TODO load the postphoned alarms from file and put them on list_of_alarms
     # TODO if day has changed get from the waiting_list and put on the list_of_alarms
@@ -55,31 +56,34 @@ def monitor():
         # get the new items in list_of_alarms
         # and start threads for them
         if len(config.list_of_alarms) > 0:
-            #print("list of alarms before pop = ", config.list_of_alarms)
+
             # get alarm from list_of_alarms
-            a = config.list_of_alarms.pop(0)
-            #print("today = ", today)
-            #print("a = ", a)
+            task = config.list_of_alarms.pop(0)
+            task_desc = task[0]
+            task_alarm = task[1]
 
             # if the alarm is today calculate delta
-            if a.year == today.year and a.month == today.month and a.day == today.day:
+            if task_alarm.year == today.year \
+                and task_alarm.month == today.month \
+                and task_alarm.day == today.day:
                 print("it's today")
                 # check the time left until alarm sounds today
-                my_delta = (a - today).total_seconds()
-                print("alarm will sound in {0} seconds = ".format(my_delta))
+                my_delta = (task_alarm - today).total_seconds()
+                print("Alarm will sound in {0} seconds".format(my_delta))
 
                 # start thread for today alarm
-                thread_list.append(Thread(target=new_alarm, args=("for now", my_delta)))
+                thread_list.append(Thread(target=new_alarm, args=(task_desc, my_delta)))
                 thread_list[-1].start()
                 #print("thread_list = " , thread_list)
 
                 #  put it on active_alarms
                 with tLock:
-                    active_alarms.append(a)
+                    active_alarms.append(task)
 
             # if the alarm is not today, postphone to a waiting list
             else:
-                waiting_list.append(a)
+                waiting_list.append(task)
+                print("Current tasks on waiting_list", waiting_list)
 
 
         # check if computer was suspended
@@ -93,7 +97,8 @@ def monitor():
 
         # quit monitor
         if config.can_quit == True:
-            # TODO save the active and postphoned alarms
+            # TODO save the active_alarms
+            # TODO save the waiting_list
             print("Goodbye!")
             break
 
