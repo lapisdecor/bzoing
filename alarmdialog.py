@@ -15,6 +15,7 @@ class AlarmDialog(Gtk.Dialog):
 
         box.set_orientation(Gtk.Orientation.VERTICAL)
         box.set_border_width(10)
+        box.set_spacing(6)
 
         # create calendar
         self.cal = Gtk.Calendar()

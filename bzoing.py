@@ -59,7 +59,6 @@ def monitor():
     """monitors the list_of_alarms"""
     n = 0
     waiting_list = []
-    today = datetime.datetime.now()
     # TODO load the postphoned alarms from file and put them on list_of_alarms
     # TODO if day has changed get from the waiting_list and put on the list_of_alarms
     while True:
@@ -72,11 +71,12 @@ def monitor():
             task_desc = task[0]
             task_alarm = task[1]
 
-            # if the alarm is today calculate delta
+            # if the alarm is today or tomorrow calculate delta
+            today = datetime.datetime.now()
             if task_alarm.year == today.year \
                 and task_alarm.month == today.month \
-                and task_alarm.day == today.day:
-                print("it's today")
+                and task_alarm.day == today.day or task_alarm.day == today.day + 1:
+                print("it's today or tomorrow")
                 # check the time left until alarm sounds today
                 my_delta = (task_alarm - datetime.datetime.now()).total_seconds()
                 print("Alarm will sound in {0} seconds".format(my_delta))
@@ -103,7 +103,24 @@ def monitor():
         if (new_time - current_time).total_seconds() > 5:
             print("computer has been suspended")
             # TODO check due alarms
-            # TODO put stop active alarms and reput them on list_of_alarms
+            # TODO stop active alarms and reput them on list_of_alarms
+
+        # detect if day has changed
+        if new_time.day == current_time.day + 1:
+            # put today and tomorrow events on the list_of_alarms
+            for task in waiting_list[:]:
+                if task[1].year == new_time.year\
+                 and task[1].month == new_time.month\
+                 and task[1].day == new_time.day or time[1].day == new_time.day + 1:
+                    with tLock:
+                        # put task on list_of_alarms
+                        config.list_of_alarms.append(task)
+                        # remove task from waiting_list
+                        if task in waiting_list:
+                            waiting_list.remove(task)
+
+
+
 
         # quit monitor
         if config.can_quit == True:

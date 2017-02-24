@@ -19,6 +19,7 @@ class TaskWindow(Gtk.Window):
         self.alarm_time = None
         self.title='Create Task'
         self.set_border_width(10)
+        self.set_icon_from_file('sinoamarelo.svg')
         self.connect('destroy', self.quit_window)
 
         # create box to hold the buttons etc.

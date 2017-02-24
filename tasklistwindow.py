@@ -11,6 +11,7 @@ class TaskListWindow(Gtk.Window):
         self.connect('destroy', self.quit_tasklist_window)
         self.set_size_request(320, 240)
         self.set_border_width(10)
+        self.set_icon_from_file('sinoamarelo.svg')
 
         box = Gtk.Box(spacing=6)
         box.set_orientation(Gtk.Orientation.VERTICAL)
