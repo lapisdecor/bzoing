@@ -45,7 +45,12 @@ def sendmessage(message):
     return
 
 def new_alarm(name, num_seconds):
-    time.sleep(num_seconds)
+    seconds_passed = 0
+    while seconds_passed < num_seconds:
+        time.sleep(1)
+        seconds_passed += 1
+        if config.can_quit:
+            return
     print("beep beep!!! it's time to do {} ".format(name))
     sendmessage("Its time for {}".format(name))
     # remove alarm from active_alarms
