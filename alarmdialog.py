@@ -29,6 +29,8 @@ class AlarmDialog(Gtk.Dialog):
         self.minutes_field = Gtk.SpinButton()
         self.hours_field.set_adjustment(hour_adjustment)
         self.minutes_field.set_adjustment(minute_adjustment)
+        self.hours_field.connect('output', self.show_leading_zeros)
+        self.minutes_field.connect('output', self.show_leading_zeros)
 
         # creates a : separator between the two SpinButtons
         time_sep_label = Gtk.Label()
@@ -43,6 +45,11 @@ class AlarmDialog(Gtk.Dialog):
         box.add(time_hbox)
 
         self.show_all()
+
+    def show_leading_zeros(self, spin_button):
+        adjustement = spin_button.get_adjustment()
+        spin_button.set_text('{:02d}'.format(int(adjustement.get_value())))
+        return True
 
     #def get_alarm():
     #    return self.alarm_time

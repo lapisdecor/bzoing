@@ -69,6 +69,7 @@ class TaskWindow(Gtk.Window):
         Creates the Alarm Dialog and stores the date and the time
         in the TaskWindow object
         """
+        #TODO must allways input a description ?
         my_alarm = alarmdialog.AlarmDialog(self)
         response = my_alarm.run()
         if response == Gtk.ResponseType.OK:

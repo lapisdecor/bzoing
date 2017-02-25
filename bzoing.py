@@ -65,7 +65,6 @@ def monitor():
     n = 0
     waiting_list = []
     # TODO load the postphoned alarms from file and put them on list_of_alarms
-    # TODO if day has changed get from the waiting_list and put on the list_of_alarms
     while True:
         # get the new items in list_of_alarms
         # and start threads for them
