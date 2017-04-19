@@ -15,18 +15,21 @@ Install the dependencies
 ------------------------
 
 .. code-block:: console
-    $ sudo apt install python3-gi portaudio19-dev python3-all-dev python3-pyaudio
+
+      $ sudo apt install python3-gi portaudio19-dev python3-all-dev python3-pyaudio
 
 Install bzoing
 --------------
 
 .. code-block:: console
-    $ pip install --user bzoing
+
+      $ pip install --user bzoing
 
 start bzoing
 ------------
 
 .. code-block:: console
-    $ bzoing-now
+
+      $ bzoing-now
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
