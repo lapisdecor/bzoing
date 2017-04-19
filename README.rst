@@ -24,7 +24,7 @@ To use Bzoing you must:
 
 * start bzoing
 
-.. code-bloc:: console
+.. code-block:: console
     $ bzoing-now
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
