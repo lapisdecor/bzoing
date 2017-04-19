@@ -1,4 +1,6 @@
-# bzoing
+======
+bzoing
+======
 
 .. image:: /bzoingdemo.png
       :alt: bzoing demo
@@ -8,17 +10,21 @@ Bzoing provides a simple way to create task reminder alarms on your Ubuntu deskt
 using Python and Gtk3.
 
 To use Bzoing you must:
+-----------------------
 
-1) install the dependencies
+* install the dependencies
 
-`$ sudo apt install python3-gi portaudio19-dev python3-all-dev python-pyaudio python3-pyaudio`
+.. code-block:: console
+    $ sudo apt install python3-gi portaudio19-dev python3-all-dev python3-pyaudio
 
-2) install bzoing
+* install bzoing
 
-`$ pip install bzoing`
+.. code-block:: console
+    $ pip install --user bzoing
 
-3) start bzoing
+* start bzoing
 
-`$ bzoing`
+.. code-bloc:: console
+    $ bzoing-now
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
