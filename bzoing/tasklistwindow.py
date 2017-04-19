@@ -2,6 +2,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+from pkg_resources import resource_filename
+filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
+
 class TaskListWindow(Gtk.Window):
     def __init__(self, task_list):
         Gtk.Window.__init__(self)
@@ -11,7 +14,7 @@ class TaskListWindow(Gtk.Window):
         self.connect('destroy', self.quit_tasklist_window)
         self.set_size_request(320, 240)
         self.set_border_width(10)
-        self.set_icon_from_file('sinoamarelo.svg')
+        self.set_icon_from_file(filepath)
 
         box = Gtk.Box(spacing=6)
         box.set_orientation(Gtk.Orientation.VERTICAL)

@@ -2,10 +2,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import taskwindow
-import tasklistwindow
+from . import taskwindow
+from . import tasklistwindow
 #import threading
-import config
+from . import config
 
 
 class BzoingMenu(Gtk.Menu):

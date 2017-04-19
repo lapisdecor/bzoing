@@ -4,7 +4,12 @@ import os
 import signal
 import datetime
 import time
-import gi
+
+try:
+    import gi
+except ImportError:
+    raise ImportError("Please sudo apt install python3-gi")
+
 from threading import Thread, Lock
 
 gi.require_version('Gtk', '3.0')
@@ -13,15 +18,19 @@ from gi.repository import Gtk
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 
-import config
-import menu
-import taskwindow
-import playme
+from . import config
+from . import menu
+from . import taskwindow
+from . import playme
 import subprocess
+from pkg_resources import resource_filename
+
 
 active_alarms = []
 thread_list = []
 tLock = Lock()
+
+filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 
 APPINDICATOR_ID = 'bzoing'
@@ -32,7 +41,7 @@ class MyBzoing:
         self.tasklist_id = -1
         self.task_window_open = False
         indicator = appindicator.Indicator.new(APPINDICATOR_ID,
-                                               os.path.abspath('sinoamarelo.svg'),
+                                               os.path.abspath(filepath),
                                                appindicator.IndicatorCategory.APPLICATION_STATUS)
         indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.my_menu = menu.BzoingMenu()
