@@ -23,6 +23,7 @@ from . import menu
 from . import taskwindow
 from . import playme
 import subprocess
+import pickle
 from pkg_resources import resource_filename
 
 
@@ -46,7 +47,17 @@ class MyBzoing:
         indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.my_menu = menu.BzoingMenu()
         indicator.set_menu(self.my_menu)
-        # TODO retrieve saved tasks from file
+        # retrieve saved tasks from file
+        try:
+            with open('outfile.p', 'rb') as fp:
+                config.list_of_alarms = pickle.load(fp)
+            print("tasks loaded from file")
+            # remove the pickle file
+            os.remove('outfile.p')
+
+        except IOError:
+            print("could't load task list file")
+
         Gtk.main()
 
 def sendmessage(message):
@@ -113,7 +124,7 @@ def monitor():
         current_time = datetime.datetime.now()
         time.sleep(1)
         new_time = datetime.datetime.now()
-        if (new_time - current_time).total_seconds() > 5:
+        if (new_time - current_time).total_seconds() > 10:
             print("computer has been suspended")
             # TODO check due alarms
             # TODO stop active alarms and reput them on list_of_alarms
@@ -137,8 +148,14 @@ def monitor():
 
         # quit monitor
         if config.can_quit == True:
-            # TODO save the active_alarms
-            # TODO save the waiting_list
+            # TODO merge the active_alarms and the waiting_list
+            tosave = active_alarms + waiting_list
+            # TODO save the merged tasks
+            if len(tosave) > 0:
+                with open('outfile.p', 'wb') as fp:
+                    pickle.dump(tosave, fp)
+                    print("Tasks have been saved")
+
             print("Goodbye!")
             break
 
@@ -152,6 +169,18 @@ def main():
     t1.start()
     t2.start()
 
+def handler(signum=None, frame=None):
+    # set config.can_quit to True if system is halting
+    config.can_quit = True
+    # wait for a bit
+    time.sleep(2)
+    print("Wait done")
+    sys.exit(0)
+
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    for sig in [signal.SIGTERM, signal.SIGHUP, signal.SIGQUIT]:
+        signal.signal(sig, handler)
+
     main()
