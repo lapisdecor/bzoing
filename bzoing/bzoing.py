@@ -93,8 +93,8 @@ def monitor():
 
             # get alarm from list_of_alarms
             task = config.list_of_alarms.pop(0)
-            task_desc = task[0]
-            task_alarm = task[1]
+            task_desc = task.get_task_desc()
+            task_alarm = task.get_alarm()
 
             # if the alarm is today or tomorrow calculate delta
             today = datetime.datetime.now()
@@ -134,9 +134,9 @@ def monitor():
         if new_time.day == current_time.day + 1:
             # put today and tomorrow events on the list_of_alarms
             for task in waiting_list[:]:
-                if task[1].year == new_time.year\
-                 and task[1].month == new_time.month\
-                 and task[1].day == new_time.day or time[1].day == new_time.day + 1:
+                if task[1].task_alarm.year == new_time.year\
+                 and task[1].task_alarm.month == new_time.month\
+                 and task[1].task_alarm.day == new_time.day or time[1].day == new_time.day + 1:
                     with tLock:
                         # put task on list_of_alarms
                         config.list_of_alarms.append(task)

@@ -146,6 +146,7 @@ class TaskWindow(Gtk.Window):
             # append list_of_alarms if alarm is set
             if self.alarm_time != None:
                 with tLock:
-                    config.list_of_alarms.append((desc, self.alarm_time))
+                    #config.list_of_alarms.append((desc, self.alarm_time))
+                    config.list_of_alarms.append(new_task)
 
         self.destroy()
