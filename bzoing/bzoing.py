@@ -4,6 +4,7 @@ import os
 import signal
 import datetime
 import time
+import sys
 
 try:
     import gi
@@ -163,7 +164,11 @@ def monitor():
 def gui():
     app = MyBzoing()
 
-def main():
+def start():
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    for sig in [signal.SIGTERM, signal.SIGHUP, signal.SIGQUIT]:
+        signal.signal(sig, handler)
     t1 = Thread(target=monitor)
     t2 = Thread(target=gui)
     t1.start()
@@ -173,14 +178,9 @@ def handler(signum=None, frame=None):
     # set config.can_quit to True if system is halting
     config.can_quit = True
     # wait for a bit
-    time.sleep(2)
+    time.sleep(6)
     print("Wait done")
     sys.exit(0)
 
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-    for sig in [signal.SIGTERM, signal.SIGHUP, signal.SIGQUIT]:
-        signal.signal(sig, handler)
-
-    main()
+    start()
