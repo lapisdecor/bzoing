@@ -65,12 +65,14 @@ def sendmessage(message):
     subprocess.Popen(['notify-send', message])
     return
 
-def new_alarm(name, num_seconds):
+def new_alarm(task_id, name, num_seconds):
     seconds_passed = 0
     while seconds_passed < num_seconds:
         time.sleep(1)
         seconds_passed += 1
         if config.can_quit:
+            return
+        if config.stop[task_id]:
             return
     print("beep beep!!! it's time to do {} ".format(name))
     sendmessage("Its time for {}".format(name))
@@ -93,6 +95,7 @@ def monitor():
 
             # get alarm from list_of_alarms
             task = config.list_of_alarms.pop(0)
+            task_id = task.task_id
             task_desc = task.get_task_desc()
             task_alarm = task.get_alarm()
 
@@ -107,7 +110,8 @@ def monitor():
                 print("Alarm will sound in {0} seconds".format(my_delta))
 
                 # start thread for today alarm
-                thread_list.append(Thread(target=new_alarm, args=(task_desc, my_delta)))
+                config.stop[task_id] = False
+                thread_list.append(Thread(target=new_alarm, args=(task_id, task_desc, my_delta)))
                 thread_list[-1].start()
                 #print("thread_list = " , thread_list)
 
@@ -127,16 +131,20 @@ def monitor():
         new_time = datetime.datetime.now()
         if (new_time - current_time).total_seconds() > 10:
             print("computer has been suspended")
-            # TODO check due alarms
-            # TODO stop active alarms and reput them on list_of_alarms
+            # stop current alarms
+            for task in active_alarms:
+                with tLock:
+                    config.stop[task.task_id] = True
+                    # reput stoped tasks on list_of_alarms
+                    config.list_of_alarms.append(task)
 
         # detect if day has changed
         if new_time.day == current_time.day + 1:
             # put today and tomorrow events on the list_of_alarms
             for task in waiting_list[:]:
-                if task[1].task_alarm.year == new_time.year\
-                 and task[1].task_alarm.month == new_time.month\
-                 and task[1].task_alarm.day == new_time.day or time[1].day == new_time.day + 1:
+                if task.task_alarm.year == new_time.year\
+                 and task.task_alarm.month == new_time.month\
+                 and task.task_alarm.day == new_time.day or task.task_alarm.day == new_time.day + 1:
                     with tLock:
                         # put task on list_of_alarms
                         config.list_of_alarms.append(task)
@@ -149,9 +157,9 @@ def monitor():
 
         # quit monitor
         if config.can_quit == True:
-            # TODO merge the active_alarms and the waiting_list
+            # merge the active_alarms and the waiting_list
             tosave = active_alarms + waiting_list
-            # TODO save the merged tasks
+            # save the merged tasks
             if len(tosave) > 0:
                 with open('outfile.p', 'wb') as fp:
                     pickle.dump(tosave, fp)
