@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -22,7 +22,7 @@ setup(
     author='Luis Louro',
     author_email='lapisdecor@gmail.com',
     url='https://github.com/lapisdecor/bzoing',
-    packages=['bzoing'],
+    packages=find_packages(exclude=('tests', 'docs')),
     install_requires=requirements,
     include_package_data=True,
     licence='MIT licence',
