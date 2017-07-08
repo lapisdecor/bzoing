@@ -2,14 +2,17 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import alarmdialog
+from . import alarmdialog
 import datetime
-import tasks
-import config
+from . import tasks
+from . import config
 import subprocess
 from threading import Lock
+from pkg_resources import resource_filename
 
 tLock = Lock()
+
+filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
 
 class TaskWindow(Gtk.Window):
     def __init__(self, parent):
@@ -19,7 +22,7 @@ class TaskWindow(Gtk.Window):
         self.alarm_time = None
         self.title='Create Task'
         self.set_border_width(10)
-        self.set_icon_from_file('sinoamarelo.svg')
+        self.set_icon_from_file(filepath)
         self.connect('destroy', self.quit_window)
 
         # create box to hold the buttons etc.
@@ -131,7 +134,7 @@ class TaskWindow(Gtk.Window):
             # sets alarm if an alarm was defined
             if alarm_time != None:
                 # sets the alarm on the new task
-                new_task.set_alarm(alarm_time)
+                new_task.set_alarm_date(alarm_time)
                 print("Alarm is set to ", alarm_time)
             else:
                 print("New task '{}' created with no Alarm!".format(desc))
@@ -143,6 +146,7 @@ class TaskWindow(Gtk.Window):
             # append list_of_alarms if alarm is set
             if self.alarm_time != None:
                 with tLock:
-                    config.list_of_alarms.append((desc, self.alarm_time))
+                    #config.list_of_alarms.append((desc, self.alarm_time))
+                    config.list_of_alarms.append(new_task)
 
         self.destroy()

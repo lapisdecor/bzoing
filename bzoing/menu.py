@@ -2,10 +2,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import taskwindow
-import tasklistwindow
+from . import taskwindow
+from . import tasklistwindow
 #import threading
-import config
+from . import config
 
 
 class BzoingMenu(Gtk.Menu):
@@ -25,9 +25,9 @@ class BzoingMenu(Gtk.Menu):
         item_separator = Gtk.SeparatorMenuItem()
         self.append(item_separator)
 
-        item_stop_alarms = Gtk.MenuItem('Stop Alarms')
-        item_stop_alarms.connect('activate', self.stop_alarms)
-        self.append(item_stop_alarms)
+        #item_stop_alarms = Gtk.MenuItem('Stop Alarms')
+        #item_stop_alarms.connect('activate', self.stop_alarms)
+        #self.append(item_stop_alarms)
 
         item_quit = Gtk.MenuItem('Quit')
         item_quit.connect('activate', self.quit)
@@ -47,11 +47,11 @@ class BzoingMenu(Gtk.Menu):
         """
         my_task_list = tasklistwindow.TaskListWindow(self.task_list)
 
-    def stop_alarms(self, widget):
-        """
-        Stops all playing alarms
-        """
-        pass
+    #def stop_alarms(self, widget):
+    #    """
+    #    Stops all playing alarms
+    #    """
+    #    pass
 
 
     def quit(self, widget):
