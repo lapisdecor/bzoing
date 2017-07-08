@@ -25,6 +25,6 @@ start bzoing
 
 .. code-block:: console
 
-      $ bzoing-now
+      $ bzoing-snap
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
