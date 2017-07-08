@@ -11,7 +11,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   bzoing-snap:
-    command: desktop-lauch bzoing-now
+    command: bzoing-now
 
 parts:
   bzoing-snap:
