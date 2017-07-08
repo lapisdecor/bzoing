@@ -14,3 +14,4 @@ parts:
     source: https://github.com/lapisdecor/bzoing.git
     # See 'snapcraft plugins'
     plugin: python
+    stage-packages: python3-pyaudio
