@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+<<<<<<< HEAD
 *$py.class
 
 # C extensions
@@ -60,3 +61,14 @@ target/
 
 # pyenv python configuration file
 .python-version
+=======
+
+# compiled python modules
+*.pyc
+
+# setuptools distribution folder
+/dist/
+
+# python egg metadata
+/*.egg-info
+>>>>>>> bdf234cc1311caf5e18ee3c4288755ffa6280e7a

@@ -2,10 +2,14 @@ import pyaudio
 import wave
 import time
 import sys
+from pkg_resources import resource_filename
+
+filepath = resource_filename(__name__, 'sounds/' + 'alarm-clock-elapsed.wav')
+
 
 class Playme():
     def __init__(self):
-        self.wf = wave.open("alarm-clock-elapsed.wav", 'rb')
+        self.wf = wave.open(filepath, 'rb')
 
     def play(self):
         p = pyaudio.PyAudio()
