@@ -6,24 +6,19 @@ bzoing
       :alt: bzoing demo
 
 
-Bzoing provides a simple way to create task reminder alarms on your Ubuntu desktop
-using Python and Gtk3.
+Bzoing provides a simple way to create task reminder alarms on your Gnu/Linux
+desktop using Python and Gtk3.
 
 To use Bzoing you must:
 
-Install the dependencies
-------------------------
-
-.. code-block:: console
-
-      $ sudo apt install python3-gi portaudio19-dev python3-all-dev python3-pyaudio
+Install snapd if you don't already have it. (try snap --help)
 
 Install bzoing
 --------------
 
 .. code-block:: console
 
-      $ pip install --user bzoing
+      $ snap install --edge bzoing-snap
 
 start bzoing
 ------------
