@@ -1,0 +1,16 @@
+
+name: bzoing-snap
+version: '0.2'
+summary: Simple calendar alarms for your desktop
+description: |
+  Bzoing provides a simple way to create task reminder alarms on your desktop 
+  using Python and Gtk3.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  bzoing:
+    source: https://github.com/lapisdecor/bzoing.git
+    # See 'snapcraft plugins'
+    plugin: python
