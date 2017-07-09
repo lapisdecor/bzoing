@@ -18,13 +18,13 @@ Install bzoing
 
 .. code-block:: console
 
-      $ snap install --edge bzoing-snap
+      $ snap install --edge bzoing
 
 start bzoing
 ------------
 
 .. code-block:: console
 
-      $ bzoing-snap
+      $ bzoing
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
