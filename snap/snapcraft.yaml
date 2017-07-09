@@ -1,5 +1,5 @@
 
-name: bzoing-snap
+name: bzoing
 version: '0.2'
 summary: Simple calendar alarms for your desktop
 description: |
@@ -10,12 +10,12 @@ grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
-  bzoing-snap:
+  bzoing:
     command: desktop-launch $SNAP/bzoing-now
     plugs: [unity7, home, pulseaudio]
 
 parts:
-  bzoing-snap:
+  bzoing:
     source: https://github.com/lapisdecor/bzoing.git
     # See 'snapcraft plugins'
     plugin: python
