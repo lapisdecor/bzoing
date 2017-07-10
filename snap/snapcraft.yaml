@@ -11,7 +11,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   bzoing:
-    command: desktop-launch $SNAP/bzoing-now
+    command: desktop-launch $SNAP/bin/bzoing-now
     plugs: [unity7, home, pulseaudio]
 
 parts:
