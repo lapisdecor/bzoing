@@ -20,6 +20,7 @@ parts:
     # See 'snapcraft plugins'
     plugin: python
     stage-packages:
+       - libnotify-bin
        - portaudio19-dev
        - python3-pyaudio
        - python3-gi
