@@ -12,7 +12,7 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 apps:
   bzoing:
     command: desktop-launch $SNAP/bin/bzoing-now
-    plugs: [x11, unity7, home, alsa]
+    plugs: [x11, unity7, alsa]
 
 parts:
   bzoing:
@@ -26,5 +26,9 @@ parts:
        - python3-gi
        - gir1.2-gtk-3.0
        - gir1.2-appindicator3-0.1
-       - gir1.2-notify-0.7
+       - alsa-base
+       - alsa-utils
+       - libasound2
+       - libasound2-data
+       - libasound2-plugins
     after: [desktop-gtk3]
