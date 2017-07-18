@@ -70,3 +70,10 @@ target/
 
 # python egg metadata
 /*.egg-info
+
+# snap
+parts/*
+!parts/plugins
+prime
+stage
+*.snap
