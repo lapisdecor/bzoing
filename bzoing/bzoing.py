@@ -57,7 +57,7 @@ class MyBzoing:
             os.remove('outfile.p')
 
         except IOError:
-            print("could't load task list file")
+            print("No pending tasks or could't load task list file.")
 
         Gtk.main()
 
