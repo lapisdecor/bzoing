@@ -22,6 +22,7 @@ parts:
     stage-packages:
        - libnotify-bin
        - python3-gi
+       - libcanberra-gtk3-module
        - gir1.2-gtk-3.0
        - gir1.2-appindicator3-0.1
        - pulseaudio-utils
