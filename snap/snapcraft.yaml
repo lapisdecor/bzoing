@@ -1,6 +1,6 @@
 
 name: bzoing
-version: '0.2'
+version: 'master'
 summary: Simple calendar alarms for your desktop
 description: |
   Bzoing provides a simple way to create task reminder alarms on your desktop
