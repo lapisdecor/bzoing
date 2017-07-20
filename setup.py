@@ -15,7 +15,7 @@ test_requirements = [
 
 setup(
     name='bzoing',
-    version='0.0.2',
+    version='v1.0-beta',
     description='Calendar alarms with python3 and gtk3',
     long_description=readme + '\n\n' + history,
     author='Luis Louro',
