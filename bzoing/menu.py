@@ -45,7 +45,7 @@ class BzoingMenu(Gtk.Menu):
         """
         Shows a window with all the tasks and alarms
         """
-        my_task_list = tasklistwindow.TaskListWindow(self.task_list)
+        see_tasks_window = tasklistwindow.TaskListWindow()
 
     #def stop_alarms(self, widget):
     #    """

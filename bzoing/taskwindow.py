@@ -140,7 +140,7 @@ class TaskWindow(Gtk.Window):
                 print("New task '{}' created with no Alarm!".format(desc))
 
             # appends task to task list
-            self.parent.task_list.append(new_task)
+            config.list_of_tasks.append(new_task)
 
             # run alarm process
             # append list_of_alarms if alarm is set

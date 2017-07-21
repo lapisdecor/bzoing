@@ -51,7 +51,7 @@ class MyBzoing:
         # retrieve saved tasks from file
         try:
             with open('outfile.p', 'rb') as fp:
-                config.list_of_alarms = pickle.load(fp)
+                config.list_of_tasks, config.list_of_alarms = pickle.load(fp)
             print("tasks loaded from file")
             # remove the pickle file
             os.remove('outfile.p')
@@ -158,7 +158,9 @@ def monitor():
         # quit monitor
         if config.can_quit == True:
             # merge the active_alarms and the waiting_list
-            tosave = active_alarms + waiting_list
+            alarms_to_save = active_alarms + waiting_list
+            # get the regular tasks
+            tosave = [config.list_of_tasks, alarms_to_save]
             # save the merged tasks
             if len(tosave) > 0:
                 with open('outfile.p', 'wb') as fp:
