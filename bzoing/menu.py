@@ -55,6 +55,5 @@ class BzoingMenu(Gtk.Menu):
 
 
     def quit(self, widget):
-        # TODO save tasks to file
         config.can_quit = True
         Gtk.main_quit()

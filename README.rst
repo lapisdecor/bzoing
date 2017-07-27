@@ -22,7 +22,7 @@ Install bzoing
 
 .. code-block:: console
 
-      $ snap install --edge bzoing
+      $ snap install --edge --devmode bzoing
 
 start bzoing
 ------------
