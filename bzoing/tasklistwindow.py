@@ -11,7 +11,7 @@ class TaskListWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         self.title="List of tasks"
-        self.tasks = config.list_of_tasks
+        self.tasks = config.list_of_tasks + config.active_alarms
 
         self.connect('destroy', self.quit_tasklist_window)
         self.set_size_request(320, 240)
@@ -27,7 +27,7 @@ class TaskListWindow(Gtk.Window):
         # creates one Gtk.Label for each item in the list_of_tasks
         for each_task in self.tasks:
             if each_task.get_alarm() == None:
-                list_of_gtk_labels.append(Gtk.HBox(Gtk.Label(each_task.get_task_desc()), Gtk.Button("Del")))
+                list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
             else:
                 list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc() + " - " + str(each_task.get_alarm())))
 

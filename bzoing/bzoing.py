@@ -28,7 +28,7 @@ import pickle
 from pkg_resources import resource_filename
 
 
-active_alarms = []
+#active_alarms = []
 thread_list = []
 tLock = Lock()
 
@@ -78,7 +78,7 @@ def new_alarm(task_id, name, num_seconds):
     sendmessage("Its time for {}".format(name))
     # remove alarm from active_alarms
     with tLock:
-        active_alarms.pop()
+        config.active_alarms.pop()
     # play sound
     my_sound = playme.Playme()
     my_sound.play()
@@ -117,7 +117,7 @@ def monitor():
 
                 #  put it on active_alarms
                 with tLock:
-                    active_alarms.append(task)
+                    config.active_alarms.append(task)
 
             # if the alarm is not today, postphone to a waiting list
             else:
@@ -132,7 +132,7 @@ def monitor():
         if (new_time - current_time).total_seconds() > 10:
             print("computer has been suspended")
             # stop current alarms
-            for task in active_alarms:
+            for task in config.active_alarms:
                 with tLock:
                     config.stop[task.task_id] = True
                     # reput stoped tasks on list_of_alarms
@@ -158,7 +158,7 @@ def monitor():
         # quit monitor
         if config.can_quit == True:
             # merge the active_alarms and the waiting_list
-            alarms_to_save = active_alarms + waiting_list
+            alarms_to_save = config.active_alarms + waiting_list
             # get the regular tasks
             tosave = [config.list_of_tasks, alarms_to_save]
             # save the merged tasks
@@ -191,6 +191,7 @@ def handler(signum=None, frame=None):
     time.sleep(6)
     print("Wait done")
     sys.exit(0)
+
 
 if __name__ == "__main__":
     start()
