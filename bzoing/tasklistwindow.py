@@ -8,10 +8,10 @@ from pkg_resources import resource_filename
 filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 class TaskListWindow(Gtk.Window):
-    def __init__(self, task_list):
+    def __init__(self):
         Gtk.Window.__init__(self)
         self.title="List of tasks"
-        self.this_list = task_list
+        self.tasks = config.list_of_tasks
 
         self.connect('destroy', self.quit_tasklist_window)
         self.set_size_request(320, 240)
@@ -24,12 +24,16 @@ class TaskListWindow(Gtk.Window):
 
         list_of_gtk_labels = []
 
-        for each_task in self.this_list:
-            # creates one Gtk.Label for each item in the list_of_tasks
-            list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc() + " - " + str(each_task.get_alarm())))
+        # creates one Gtk.Label for each item in the list_of_tasks
+        for each_task in self.tasks:
+            if each_task.get_alarm() == None:
+                list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc()))
+            else:
+                list_of_gtk_labels.append(Gtk.Label(each_task.get_task_desc() + " - " + str(each_task.get_alarm())))
 
         for label in list_of_gtk_labels:
             box.pack_start(label, 0, 0, 2)
+            #box.pack_start(label[1], 0, 0, 2)
 
         self.show_all()
 
