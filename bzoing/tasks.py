@@ -1,38 +1,177 @@
 import datetime
+import pickle
+import os
+from functools import total_ordering
+from bzoing.playme import Playme
+import time
+import threading
 
 
-class Task:
-    """
-    Defines a task with id, description and alarm
-    """
-    def __init__(self, task_id, task_desc):
-        self.task_id = task_id
-        self.task_desc = task_desc
-        self.alarm_on = False
-        self.alarm_date = None
+@total_ordering
+class Task():
+    """Defines tasks, their representation and ordering."""
+    def __init__(self, id, description, alarm, sound, function):
+        self.id = id
+        self.description = description
+        self.alarm = alarm
+        self.function = function
+        self.sound = sound
 
-    def set_task_desc(self, task_desc):
-        self.task_desc = task_desc
+    def __repr__(self):
+        return '{}: {} {} {}'.format(self.__class__.__name__,
+                                     self.id,
+                                     self.description,
+                                     self.alarm)
 
-    def get_task_id(self):
-        return self.task_id
+    def __lt__(self, other):
+        if hasattr(other, 'alarm'):
+            return self.alarm.__lt__(other.alarm)
 
-    def get_task_desc(self):
-        return self.task_desc
+    def __eq__(self, other):
+        if hasattr(other, 'alarm'):
+            return self.alarm.__eq__(other.alarm)
 
-    def set_alarm_on(self):
-        self.alarm_on = True
 
-    def set_alarm_off(self):
-        self.alarm_on = False
+class Bzoinq():
+    """Creates a running Bzoinq."""
+    def __init__(self):
+        self.task_id = 0
+        self.task_list = []
+        # load the saved tasks
+        try:
+            with open('outfile.p', 'rb') as fp:
+                self.task_list = pickle.load(fp)
+            print("tasks loaded from file")
+            # remove the pickle file
+            os.remove('outfile.p')
 
-    def set_alarm_date(self, date):
-        assert isinstance(date, datetime.datetime)
-        self.alarm_date = date
-        self.set_alarm_on()
+        except IOError:
+            print("could't load task list file")
 
-    def get_alarm(self):
-        return self.alarm_date
+        # make task_id equal to the greatest of all task_id's
+        bigger = 0
+        for task in self.task_list:
+            if task.id > bigger:
+                bigger = task.id
+        self.task_id = bigger
+        print("new task id = {}".format(self.task_id))
 
-    def is_alarm_on(self):
-        return self.alarm_on
+    def __repr__(self):
+        return '{}'.format(self.task_list)
+
+    def create_task(self, description="Sample task",
+                    alarm=datetime.datetime.now(), sound=True, function=None):
+        """Creates a new task"""
+        assert type(alarm) is datetime.datetime
+        self.task_id += 1
+        # create the task
+        new_task = Task(self.task_id, description, alarm, sound, function)
+        # add task to task list
+        self.task_list.append(new_task)
+        # sort the task list
+        self.task_list = sorted(self.task_list)
+        print("new task created")
+
+    def remove_task(self, id_to_remove):
+        """Removes task with given id"""
+        for task in self.task_list[:]:
+            if task.id == id_to_remove:
+                try:
+                    self.task_list.remove(task)
+                except:
+                    print("couldn't remove task")
+
+    def remove_all_tasks(self):
+        """Clears all the tasks"""
+        self.task_list = []
+        self.task_id = 0
+        print("All tasks have been cleaned")
+
+    def get_task_list(self):
+        """Returns the list of tasks"""
+        return self.task_list
+
+    def save_tasks(self):
+        """Saves current tasks to file"""
+        with open('outfile.p', 'wb') as fp:
+            pickle.dump(self.task_list, fp)
+        print("Tasks have been saved")
+
+    def change_alarm(self, id_to_change, new_time):
+        """
+        Changes the alarm time of a task.
+        new_time must be a datetime object
+        """
+        assert type(new_time) is datetime.datetime
+        # time on a task can only be changed if the task still exists
+        for task in self.task_list()[:]:
+            if task.id == id_to_change:
+                task.alarm = new_time
+        print("alarm with id {} changed".format(id_to_change))
+
+
+class Monitorthread(threading.Thread):
+    def __init__(self, name=None, target=None):
+        super().__init__(name=name, target=target)
+
+    # def run(self):
+    #     pass
+
+
+class Monitor():
+    """Defines a monitor that keeps checking a task list for changes"""
+    def __init__(self, bzoinq_obj):
+        self.stopit = False
+        self.bzoinq_obj = bzoinq_obj
+
+    def stop(self):
+        """stops the monitor thread"""
+        self.stopit = True
+
+    def start(self):
+        """Starts the monitor thread"""
+        t = Monitorthread(target=self.keep_checking)
+        t.start()
+        print("Monitor thread has started")
+
+    def keep_checking(self):
+        """Keeps checking time and sorts the task_list"""
+        while True:
+            time.sleep(1)
+            if self.stopit:
+                break
+            # get current task list
+            task_list = self.bzoinq_obj.get_task_list()
+            if len(task_list) > 0:
+                # make sure task_list is sorted
+                task_list = sorted(task_list)
+                # check the time
+                current_time = datetime.datetime.now()
+                if current_time >= task_list[0].alarm:
+                    # get task id
+                    current_id = task_list[0].id
+                    current_desc = task_list[0].description
+                    print("executing alarm: {}".format(task_list[0].alarm))
+                    # if there is a function, execute it
+                    if task_list[0].function is not None:
+                        task_list[0].function()
+                    # play the sound if sound is True
+                    if task_list[0].sound:
+                        # play sound
+                        my_sound = Playme()
+                        my_sound.play()
+
+                    # remove current alarm from the original task_list
+                    self.bzoinq_obj.remove_task(current_id)
+                    print("alarm is done {}".format(current_desc))
+
+
+# help function
+def to_datetime(sometime):
+    """converts Y-M-D 00:00:00 (string) time input to datetime"""
+    try:
+        my_datetime = datetime.datetime.strptime(sometime, '%Y-%m-%d %H:%M:%S')
+    except ValueError:
+        print("Incorrect time. Please use Y-M-D 00:00:00 format.")
+        raise ValueError
+    return my_datetime

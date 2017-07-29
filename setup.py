@@ -10,7 +10,7 @@ requirements = [
 ]
 
 test_requirements = [
-    "nose"
+    
 ]
 
 setup(
