@@ -11,7 +11,7 @@ class TaskListWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self)
         self.title="List of tasks"
-        self.tasks = config.list_of_tasks + config.active_alarms
+        self.tasks = config.list_of_tasks
 
         self.connect('destroy', self.quit_tasklist_window)
         self.set_size_request(320, 240)
