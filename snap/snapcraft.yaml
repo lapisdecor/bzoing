@@ -17,7 +17,8 @@ apps:
 parts:
   bzoing:
     source: https://github.com/lapisdecor/bzoing.git
-    source-tag: v1.0
+    source-type: git
+    source-branch: v1.0
     # See 'snapcraft plugins'
     plugin: python
     stage-packages:
