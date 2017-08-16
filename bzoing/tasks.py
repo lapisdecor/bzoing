@@ -5,17 +5,19 @@ from functools import total_ordering
 from bzoing.playme import Playme
 import time
 import threading
+import subprocess
 
 
 @total_ordering
 class Task():
     """Defines tasks, their representation and ordering."""
-    def __init__(self, id, description, alarm, sound, function):
+    def __init__(self, id, description, alarm, sound, function, notify):
         self.id = id
         self.description = description
         self.alarm = alarm
         self.function = function
         self.sound = sound
+        self.notify = notify
 
     def __repr__(self):
         return '{}: {} {} {}'.format(self.__class__.__name__,
@@ -60,12 +62,15 @@ class Bzoinq():
         return '{}'.format(self.task_list)
 
     def create_task(self, description="Sample task",
-                    alarm=datetime.datetime.now(), sound=True, function=None):
+                    alarm=datetime.datetime.now(),
+                    sound=True,
+                    function=None,
+                    notify=True):
         """Creates a new task"""
         assert type(alarm) is datetime.datetime
         self.task_id += 1
         # create the task
-        new_task = Task(self.task_id, description, alarm, sound, function)
+        new_task = Task(self.task_id, description, alarm, sound, function, notify)
         # add task to task list
         self.task_list.append(new_task)
         # sort the task list
@@ -160,6 +165,8 @@ class Monitor():
                         # play sound
                         my_sound = Playme()
                         my_sound.play()
+                    if task_list[0].notify:
+                        subprocess.Popen(['notify-send', current_desc])
 
                     # remove current alarm from the original task_list
                     self.bzoinq_obj.remove_task(current_id)
