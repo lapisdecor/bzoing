@@ -2,6 +2,26 @@
 
 from bzoing.tasks import Bzoinq, Monitor
 import time
+import gi
+
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+from pkg_resources import resource_filename
+
+
+filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
+
+class Gui(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.set_icon_from_file(filepath)
+        self.connect('destroy', self.quit_window)
+        self.show_all()
+
+    def quit_window(self, window):
+        """Quits the window"""
+        self.destroy()
+        Gtk.main_quit()
 
 def start():
     # start the tasklist (Bzoinq)
@@ -11,12 +31,12 @@ def start():
     my_monitor = Monitor(my_tasklist)
     my_monitor.start()
 
-    # add a task
-    my_tasklist.create_task()
+    # start the GUI
+    gui = Gui()
+    Gtk.main()
 
-    # wait a bit and stop the monitor
-    time.sleep(5)
-    my_monitor.stop() 
+    # stop the monitor
+    my_monitor.stop()
 
 
 if __name__ == "__main__":
