@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from pkg_resources import resource_filename
 
+import share
 
 filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
 
@@ -25,13 +26,14 @@ class Gui(Gtk.Window):
 
 def start():
     # start the tasklist (Bzoinq)
-    my_tasklist = Bzoinq()
+    share.tasklist = Bzoinq()
 
     # start the Monitor
-    my_monitor = Monitor(my_tasklist)
+    my_monitor = Monitor(share.tasklist)
     my_monitor.start()
 
-    # start the GUI
+    # start the gui and pass tasklist to the gui so we can create tasks
+    # from the gui
     gui = Gui()
     Gtk.main()
 
