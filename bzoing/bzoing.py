@@ -8,7 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from pkg_resources import resource_filename
 
-import share
+from . import share
 
 filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
 
@@ -39,6 +39,9 @@ def start():
 
     # stop the monitor
     my_monitor.stop()
+
+    # goodbye message
+    print("Bye!")
 
 
 if __name__ == "__main__":
