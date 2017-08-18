@@ -30,7 +30,7 @@ class Gui(Gtk.Window):
 def handler(signum = None, frame = None):
     if len(share.tasklist.get_task_list()) > 0:
         with open('outfile.p', 'wb') as fp:
-                    pickle.dump(share.tasklist, fp)
+                    pickle.dump(share.tasklist.get_task_list(), fp)
     print("Tasks have been saved")
     sys.exit(0)
 
