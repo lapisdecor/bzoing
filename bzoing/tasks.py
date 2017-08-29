@@ -39,16 +39,27 @@ class Bzoinq():
     def __init__(self):
         self.task_id = 0
         self.task_list = []
+        self.due_task_list = []
+        self.temp_task_list = []
         # load the saved tasks
         try:
             with open('outfile.p', 'rb') as fp:
-                self.task_list = pickle.load(fp)
+                self.temp_task_list = pickle.load(fp)
             print("tasks loaded from file")
             # remove the pickle file
             os.remove('outfile.p')
 
         except IOError:
             print("could't load task list file")
+
+        # move due tasks to due_task_list and not due tasks to task_list
+        for task in self.temp_task_list:
+            if datetime.datetime.now() > task.alarm:
+                self.due_task_list.append(task)
+            else:
+                self.task_list.append(task)
+        assert len(self.temp_task_list) == len(self.due_task_list) + len(self.task_list)
+        self.temp_task_list = []
 
         # make task_id equal to the greatest of all task_id's
         bigger = 0
@@ -114,6 +125,12 @@ class Bzoinq():
                 task.alarm = new_time
         print("alarm with id {} changed".format(id_to_change))
 
+    def get_due_taks():
+        return self.due_task_list
+
+    def clear_due_tasks():
+        self.due_task_list = []
+
 
 class Monitorthread(threading.Thread):
     def __init__(self, name=None, target=None):
@@ -168,6 +185,8 @@ class Monitor():
                     if task_list[0].notify:
                         subprocess.Popen(['notify-send', current_desc])
 
+                    # put due task in due_task_list
+                    self.bzoinq_obj.due_task_list.append(task_list[0])
                     # remove current alarm from the original task_list
                     self.bzoinq_obj.remove_task(current_id)
                     print("alarm is done {}".format(current_desc))
