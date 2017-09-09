@@ -2,29 +2,81 @@
 
 from bzoing.tasks import Bzoinq, Monitor
 import time
+
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+
 from pkg_resources import resource_filename
 from . import share
 import signal
 import sys
 
+gi.require_version('AppIndicator3', '0.1')
+from gi.repository import AppIndicator3 as appindicator
+
+import os
+
 
 filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
+APPINDICATOR_ID = 'bzoing'
 
 
-class Gui(Gtk.Window):
+class BzoingMenu(Gtk.Menu):
     def __init__(self):
-        Gtk.Window.__init__(self)
-        self.set_icon_from_file(filepath)
-        self.connect('destroy', self.quit_window)
+        Gtk.Menu.__init__(self)
+
+        item_new_task = Gtk.MenuItem('New task')
+        item_new_task.connect('activate', self.new_task)
+        self.append(item_new_task)
+
+        item_see_tasks = Gtk.MenuItem('See tasks')
+        item_see_tasks.connect('activate', self.see_tasks)
+        self.append(item_see_tasks)
+
+        item_see_past_tasks = Gtk.MenuItem("See past tasks")
+        item_see_past_tasks.connect('activate', self.see_past_tasks)
+        self.append(item_see_past_tasks)
+
+        item_separator = Gtk.SeparatorMenuItem()
+        self.append(item_separator)
+
+        item_quit = Gtk.MenuItem('Quit')
+        item_quit.connect('activate', self.quit)
+        self.append(item_quit)
+
         self.show_all()
 
-    def quit_window(self, window):
-        """Quits the window"""
-        self.destroy()
+    def new_task(self, widget):
+        """
+        Creates new task window
+        """
+        #my_task_window = TaskWindow(self)
+
+    def see_tasks(self, widget):
+        """
+        Shows a window with all the tasks and alarms
+        """
+        #see_tasks_window = tasklistwindow.TaskListWindow()
+
+    def see_past_tasks(self, widget):
+        """
+        Shows a window with all the done tasks
+        """
+
+
+    def quit(self, widget):
         Gtk.main_quit()
+
+
+class Gui:
+    def __init__(self):
+        self.indicator = appindicator.Indicator.new(APPINDICATOR_ID,
+                                           os.path.abspath(filepath),
+                                           appindicator.IndicatorCategory.APPLICATION_STATUS)
+        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self.my_menu = BzoingMenu()
+        self.indicator.set_menu(self.my_menu)
 
 
 def handler(signum = None, frame = None):
