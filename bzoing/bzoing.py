@@ -16,6 +16,7 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 
 import os
+from . import setalarmwindow
 
 
 filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
@@ -51,7 +52,8 @@ class BzoingMenu(Gtk.Menu):
         """
         Creates new task window
         """
-        #my_task_window = TaskWindow(self)
+        alarm_window = setalarmwindow.SetAlarmWindow(self)
+
 
     def see_tasks(self, widget):
         """
@@ -63,6 +65,7 @@ class BzoingMenu(Gtk.Menu):
         """
         Shows a window with all the done tasks
         """
+        pass
 
 
     def quit(self, widget):
