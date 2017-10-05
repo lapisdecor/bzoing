@@ -1,10 +1,13 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+import datetime
+import subprocess
+from . import share
 
 class SetAlarmWindow(Gtk.Window):
     def __init__(self, parent):
-        Gtk.Window.__init__(self)
+        Gtk.Window.__init__(self, title="Set Alarm")
 
         # set dialog measures and spacing
         #self.set_default_size(150, 100)
@@ -22,8 +25,8 @@ class SetAlarmWindow(Gtk.Window):
         box.add(task_label)
 
         # create a field to input the task description
-        task_field = Gtk.Entry()
-        box.add(task_field)
+        self.task_field = Gtk.Entry()
+        box.add(self.task_field)
 
         # create calendar
         self.cal = Gtk.Calendar()
@@ -65,7 +68,25 @@ class SetAlarmWindow(Gtk.Window):
         return True
 
     def quit_window(self, window):
-        window.destroy()
+        self.destroy()
 
     def button_set_alarm_cliked(self, button):
-        pass
+        task_description = self.task_field.get_text()
+        date = self.cal.get_date()
+        hours = self.hours_field.get_text()
+        minutes = self.minutes_field.get_text()
+        self.alarm_time = datetime.datetime(date.year, date.month + 1, date.day, int(hours), int(minutes))
+
+        # if time not valid, forget the time with a notification
+        if self.alarm_time < datetime.datetime.now():
+            self.sendmessage("The alarm is in the past, please set it again.")
+            self.alarm_time = None
+        print(task_description, self.alarm_time)
+
+        # create task
+        if self.alarm_time != None:
+            share.tasklist.create_task(description=task_description, alarm=self.alarm_time)
+            self.destroy()
+
+    def sendmessage(self, message):
+        subprocess.Popen(['notify-send', message])
