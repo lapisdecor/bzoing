@@ -17,6 +17,7 @@ from gi.repository import AppIndicator3 as appindicator
 
 import os
 from . import setalarmwindow
+from . import seetasks
 
 
 filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
@@ -59,7 +60,8 @@ class BzoingMenu(Gtk.Menu):
         """
         Shows a window with all the tasks and alarms
         """
-        #see_tasks_window = tasklistwindow.TaskListWindow()
+        see_tasks_window = seetasks.SeeTasks(self)
+        pass
 
     def see_past_tasks(self, widget):
         """
