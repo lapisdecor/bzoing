@@ -21,7 +21,7 @@ class SeeTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Alarm", renderer, text=2)
         tree.append_column(column)
         renderer = Gtk.CellRendererToggle()
-        column = Gtk.TreeViewColumn("Apagar", renderer, active=3)
+        column = Gtk.TreeViewColumn("Delete", renderer, active=3)
         tree.append_column(column)
 
         self.add(tree)
