@@ -35,6 +35,11 @@ class SeePastTasks(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='Past Tasks')
 
+        box = Gtk.Box()
+        box.set_orientation(Gtk.Orientation.VERTICAL)
+        box.set_border_width(10)
+        box.set_spacing(6)
+
         self.connect('destroy', self.quit_window)
         store = Gtk.ListStore(str, str, str)
         for task in share.tasklist.due_task_list:
@@ -49,8 +54,19 @@ class SeePastTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Alarm", renderer, text=2)
         tree.append_column(column)
 
-        self.add(tree)
+        box.add(tree)
+
+        button = Gtk.Button("Clear")
+        button.connect('clicked', self.clear)
+        box.add(button)
+
+        self.add(box)
         self.show_all()
+
+    def clear(self, widget):
+        share.tasklist.due_task_list = []
+        self.quit_window(self)
+        self.__init__(self)
 
     def quit_window(self, window):
         self.destroy()
