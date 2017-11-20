@@ -8,6 +8,12 @@ class SeeTasks(Gtk.Window):
         Gtk.Window.__init__(self, title='See Tasks')
 
         self.connect('destroy', self.quit_window)
+
+        box = Gtk.Box()
+        box.set_orientation(Gtk.Orientation.VERTICAL)
+        box.set_border_width(10)
+        box.set_spacing(6)
+
         store = Gtk.ListStore(str, str, str, bool)
         for task in share.tasklist.get_task_list():
             treeiter = store.append([str(task.id), task.description, str(task.alarm), 0])
@@ -24,7 +30,8 @@ class SeeTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Delete", renderer, active=3)
         tree.append_column(column)
 
-        self.add(tree)
+        box.add(tree)
+        self.add(box)
         self.show_all()
 
     def quit_window(self, window):
