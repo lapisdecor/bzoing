@@ -29,3 +29,28 @@ class SeeTasks(Gtk.Window):
 
     def quit_window(self, window):
         self.destroy()
+
+
+class SeePastTasks(Gtk.Window):
+    def __init__(self, parent):
+        Gtk.Window.__init__(self, title='Past Tasks')
+
+        self.connect('destroy', self.quit_window)
+        store = Gtk.ListStore(str, str, str)
+        for task in share.tasklist.due_task_list:
+            treeiter = store.append([str(task.id), task.description, str(task.alarm)])
+
+        tree = Gtk.TreeView(store)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Id", renderer, text=0)
+        tree.append_column(column)
+        column = Gtk.TreeViewColumn("Description", renderer, text=1)
+        tree.append_column(column)
+        column = Gtk.TreeViewColumn("Alarm", renderer, text=2)
+        tree.append_column(column)
+
+        self.add(tree)
+        self.show_all()
+
+    def quit_window(self, window):
+        self.destroy()

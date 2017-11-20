@@ -61,13 +61,12 @@ class BzoingMenu(Gtk.Menu):
         Shows a window with all the tasks and alarms
         """
         see_tasks_window = seetasks.SeeTasks(self)
-        pass
 
     def see_past_tasks(self, widget):
         """
         Shows a window with all the done tasks
         """
-        pass
+        see_past_window = seetasks.SeePastTasks(self)
 
 
     def quit(self, widget):
