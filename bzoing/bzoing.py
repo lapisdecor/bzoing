@@ -86,9 +86,8 @@ class Gui:
 
 def handler(signum = None, frame = None):
     """Handles computer shutdown"""
-    if len(share.tasklist.get_task_list()) > 0:
-        with open('outfile.p', 'wb') as fp:
-                    pickle.dump(share.tasklist.get_task_list(), fp)
+    share.tasklist.save_tasks()
+    time.sleep(1)
     print("Tasks have been saved")
     sys.exit(0)
 
