@@ -16,6 +16,7 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import AppIndicator3 as appindicator
 
 import os
+import pickle
 from . import setalarmwindow
 from . import seetasks
 
@@ -109,6 +110,9 @@ def start():
     # from the gui
     gui = Gui()
     Gtk.main()
+
+    # save tasks
+    share.tasklist.save_tasks()
 
     # stop the monitor
     my_monitor.stop()
