@@ -86,7 +86,9 @@ class Gui:
 
 def handler(signum = None, frame = None):
     """Handles computer shutdown"""
+    Gtk.main_quit()
     share.tasklist.save_tasks()
+    share.my_monitor.stop()
     time.sleep(1)
     print("Tasks have been saved")
     sys.exit(0)
@@ -102,8 +104,8 @@ def start():
     share.tasklist = Bzoinq()
 
     # start the Monitor
-    my_monitor = Monitor(share.tasklist)
-    my_monitor.start()
+    share.my_monitor = Monitor(share.tasklist)
+    share.my_monitor.start()
 
     # start the gui and pass tasklist to the gui so we can create tasks
     # from the gui
@@ -114,7 +116,7 @@ def start():
     share.tasklist.save_tasks()
 
     # stop the monitor
-    my_monitor.stop()
+    share.my_monitor.stop()
 
     # goodbye message
     print("Bye!")
