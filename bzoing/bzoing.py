@@ -83,66 +83,7 @@ class Gui:
         self.my_menu = BzoingMenu()
         self.indicator.set_menu(self.my_menu)
 
-
-# def handler(signum = None, frame = None):
-#     """Handles computer shutdown"""
-#     Gtk.main_quit()
-#     share.tasklist.save_tasks()
-#     share.my_monitor.stop()
-#     time.sleep(1)
-#     print("Tasks have been saved")
-#     sys.exit(0)
-
-
 def start():
-    # catch shutdown
-    # for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGQUIT]:
-    #     signal.signal(sig, handler)
-
-
-    # from https://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working/
-    def InitSignal(gui):
-        def signal_action(signal):
-            if signal is 1:
-                print("Caught signal SIGHUP(1)")
-            elif signal is 2:
-                print("Caught signal SIGINT(2)")
-            elif signal is 15:
-                print("Caught signal SIGTERM(15)")
-            #gui.cleanup()
-            #gui.quit(None)
-            #share.tasklist.save_tasks()
-            #share.my_monitor.stop()
-            Gtk.main_quit()
-
-        def idle_handler(*args):
-            print("Python signal handler activated.")
-            GLib.idle_add(signal_action, priority=GLib.PRIORITY_HIGH)
-
-        def handler(*args):
-            print("GLib signal handler activated.")
-            signal_action(args[0])
-
-        def install_glib_handler(sig):
-            unix_signal_add = None
-
-            if hasattr(GLib, "unix_signal_add"):
-                unix_signal_add = GLib.unix_signal_add
-            elif hasattr(GLib, "unix_signal_add_full"):
-                unix_signal_add = GLib.unix_signal_add_full
-
-            if unix_signal_add:
-                print("Register GLib signal handler: %r" % sig)
-                unix_signal_add(GLib.PRIORITY_HIGH, sig, handler, sig)
-            else:
-                print("Can't install GLib signal handler, too old gi.")
-
-        SIGS = [getattr(signal, s, None) for s in "SIGINT SIGTERM SIGHUP".split()]
-        for sig in filter(None, SIGS):
-            print("Register Python signal handler: %r" % sig)
-            signal.signal(sig, idle_handler)
-            GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
-
 
     # start the tasklist (Bzoinq)
     share.tasklist = Bzoinq()
@@ -154,7 +95,6 @@ def start():
     # start the gui and pass tasklist to the gui so we can create tasks
     # from the gui
     gui = Gui()
-    InitSignal(gui)
     Gtk.main()
 
     # save tasks

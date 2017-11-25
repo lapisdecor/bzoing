@@ -86,6 +86,8 @@ class SetAlarmWindow(Gtk.Window):
         # create task
         if self.alarm_time != None:
             share.tasklist.create_task(description=task_description, alarm=self.alarm_time)
+            # save the tasks here to avoid shutdown saving
+            share.tasklist.save_tasks()
             self.destroy()
 
     def sendmessage(self, message):
