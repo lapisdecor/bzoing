@@ -14,11 +14,11 @@ class SeeTasks(Gtk.Window):
         box.set_border_width(10)
         box.set_spacing(6)
 
-        store = Gtk.ListStore(str, str, str, bool)
+        self.store = Gtk.ListStore(str, str, str, bool)
         for task in share.tasklist.get_task_list():
-            treeiter = store.append([str(task.id), task.description, str(task.alarm), 0])
+            treeiter = self.store.append([str(task.id), task.description, str(task.alarm), 0])
 
-        tree = Gtk.TreeView(store)
+        tree = Gtk.TreeView(self.store)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Id", renderer, text=0)
         tree.append_column(column)
@@ -30,9 +30,29 @@ class SeeTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Delete", renderer, active=3)
         tree.append_column(column)
 
+        #path = Gtk.TreePath(0)
+        renderer.connect('toggled', self.on_task_check)
+
         box.add(tree)
         self.add(box)
         self.show_all()
+
+    def on_task_check(self, something, path):
+        # mark checkbox
+        self.store[path][3] = not self.store[path][3]
+
+        treeiter = self.store.get_iter(path)
+
+        # get id from ListStore (value at first column)
+        this_id = int(self.store.get_value(treeiter, 0))
+
+        # remove
+        self.store.remove(treeiter)
+
+        # delete task
+        print("Task {} removed".format(this_id))
+        share.tasklist.remove_task(this_id)
+        share.tasklist.save_tasks()
 
     def quit_window(self, window):
         self.destroy()
