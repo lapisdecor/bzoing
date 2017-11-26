@@ -7,6 +7,10 @@ import time
 import threading
 import subprocess
 
+share_dir = os.path.expanduser('~/.local/share/bzoing')
+if not os.path.isdir(share_dir):
+    os.mkdir(share_dir)
+
 
 @total_ordering
 class Task():
@@ -43,11 +47,11 @@ class Bzoinq():
         self.temp_task_list = []
         # load the saved tasks
         try:
-            with open('outfile.p', 'rb') as fp:
+            with open(share_dir + "/" + 'outfile.p', 'rb') as fp:
                 self.temp_task_list = pickle.load(fp)
             print("tasks loaded from file")
             # remove the pickle file
-            os.remove('outfile.p')
+            os.remove(share_dir + "/" + 'outfile.p')
 
         except IOError:
             print("could't load task list file")
@@ -109,7 +113,7 @@ class Bzoinq():
 
     def save_tasks(self):
         """Saves current tasks to file"""
-        with open('outfile.p', 'wb') as fp:
+        with open(share_dir + "/" + 'outfile.p', 'wb') as fp:
             pickle.dump(self.task_list, fp)
         print("Tasks have been saved")
 
