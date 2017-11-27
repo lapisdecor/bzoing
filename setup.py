@@ -10,12 +10,12 @@ requirements = [
 ]
 
 test_requirements = [
-    
+
 ]
 
 setup(
     name='bzoing',
-    version='v1.0-beta',
+    version='v2.0-beta',
     description='Calendar alarms with python3 and gtk3',
     long_description=readme + '\n\n' + history,
     author='Luis Louro',
@@ -28,14 +28,12 @@ setup(
     zip_safe=False,
     keywords='bzoing',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     test_suite='tests',
     tests_require=test_requirements,
