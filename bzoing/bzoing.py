@@ -97,8 +97,8 @@ def start():
     gui = Gui()
     Gtk.main()
 
-    # save tasks (this is not needed here)
-    #share.tasklist.save_tasks()
+    # save tasks
+    share.tasklist.save_tasks()
 
     # stop the monitor
     share.my_monitor.stop()
