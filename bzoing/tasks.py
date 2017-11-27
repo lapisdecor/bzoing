@@ -50,8 +50,8 @@ class Bzoinq():
             with open(share_dir + "/" + 'outfile.p', 'rb') as fp:
                 self.temp_task_list = pickle.load(fp)
             print("tasks loaded from file")
-            # remove the pickle file
-            os.remove(share_dir + "/" + 'outfile.p')
+            # remove the pickle file (not a good idea)
+            #os.remove(share_dir + "/" + 'outfile.p')
 
         except IOError:
             print("could't load task list file")
