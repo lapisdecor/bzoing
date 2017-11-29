@@ -9,7 +9,7 @@ import subprocess
 
 share_dir = os.path.expanduser('~/.local/share/bzoing')
 if not os.path.isdir(share_dir):
-    os.mkdir(share_dir)
+    os.makedirs(share_dir)
 
 
 @total_ordering
