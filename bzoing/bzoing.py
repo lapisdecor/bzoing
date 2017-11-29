@@ -5,7 +5,7 @@ import time
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk
 
 from pkg_resources import resource_filename
 from . import share
