@@ -72,7 +72,7 @@ class SeePastTasks(Gtk.Window):
 
         self.connect('destroy', self.quit_window)
         store = Gtk.ListStore(str, str, str)
-        for task in share.tasklist.due_task_list:
+        for task in share.tasklist.get_due_tasks():
             treeiter = store.append([str(task.id), task.description, str(task.alarm)])
 
         tree = Gtk.TreeView(store)
@@ -94,7 +94,7 @@ class SeePastTasks(Gtk.Window):
         self.show_all()
 
     def clear(self, widget):
-        share.tasklist.due_task_list = []
+        share.tasklist.clear_due_tasks()
         self.quit_window(self)
         self.__init__(self)
 

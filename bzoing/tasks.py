@@ -129,10 +129,10 @@ class Bzoinq():
                 task.alarm = new_time
         print("alarm with id {} changed".format(id_to_change))
 
-    def get_due_taks():
+    def get_due_tasks(self):
         return self.due_task_list
 
-    def clear_due_tasks():
+    def clear_due_tasks(self):
         self.due_task_list = []
 
 
