@@ -28,4 +28,5 @@ parts:
        - gir1.2-gtk-3.0
        - gir1.2-appindicator3-0.1
        - pulseaudio-utils
+       - libwayland-client0
     after: [desktop-gtk3]
