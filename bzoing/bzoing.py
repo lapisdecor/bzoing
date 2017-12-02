@@ -89,8 +89,8 @@ def start():
     share.tasklist = Bzoinq()
 
     # start the Monitor
-    share.my_monitor = Monitor(share.tasklist)
-    share.my_monitor.start()
+    my_monitor = Monitor(share.tasklist)
+    my_monitor.start()
 
     # start the gui and pass tasklist to the gui so we can create tasks
     # from the gui
@@ -101,7 +101,7 @@ def start():
     share.tasklist.save_tasks()
 
     # stop the monitor
-    share.my_monitor.stop()
+    my_monitor.stop()
 
     # goodbye message
     print("Bye!")
