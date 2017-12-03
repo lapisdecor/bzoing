@@ -4,10 +4,10 @@ from gi.repository import Gtk
 import datetime
 import subprocess
 from . import share
-from pkg_resources import resource_filename
+#from pkg_resources import resource_filename
 
 
-filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
+#filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 class SetAlarmWindow(Gtk.Window):
     def __init__(self, parent):
@@ -17,8 +17,8 @@ class SetAlarmWindow(Gtk.Window):
         #self.set_default_size(150, 100)
 
         # set icon
-        self.set_icon_from_file(filepath)
-        
+        #self.set_icon_from_file(filepath)
+
         self.connect('destroy', self.quit_window)
         box = Gtk.Box()
 
