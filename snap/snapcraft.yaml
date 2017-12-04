@@ -18,7 +18,6 @@ apps:
       - pulseaudio
       - wayland
       - desktop
-      - home
       - gsettings
       - opengl
 
