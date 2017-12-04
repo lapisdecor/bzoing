@@ -2,10 +2,10 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import datetime
+import time
 import subprocess
 from . import share
 from pkg_resources import resource_filename
-
 
 filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
@@ -49,6 +49,11 @@ class SetAlarmWindow(Gtk.Window):
         self.minutes_field.set_adjustment(minute_adjustment)
         self.hours_field.connect('output', self.show_leading_zeros)
         self.minutes_field.connect('output', self.show_leading_zeros)
+        # Start with current_time + 1 hour
+        localtime = datetime.datetime.now()
+        localtime_plus_1_hour = localtime + datetime.timedelta(minutes=60)
+        self.hours_field.set_value(localtime_plus_1_hour.hour)
+        self.minutes_field.set_value(localtime_plus_1_hour.minute)
 
         # creates a : separator between the two SpinButtons
         time_sep_label = Gtk.Label()
