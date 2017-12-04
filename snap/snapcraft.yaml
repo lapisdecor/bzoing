@@ -12,7 +12,15 @@ confinement: strict # use 'strict' once you have the right plugs and slots
 apps:
   bzoing:
     command: desktop-launch $SNAP/bin/bzoing-now
-    plugs: [x11, unity7, pulseaudio, wayland, desktop, gsettings, opengl]
+    plugs:
+      - x11
+      - unity7
+      - pulseaudio
+      - wayland
+      - desktop
+      - home
+      - gsettings
+      - opengl
 
 parts:
   bzoing:
@@ -28,5 +36,5 @@ parts:
        - gir1.2-gtk-3.0
        - gir1.2-appindicator3-0.1
        - pulseaudio-utils
-       - libglib2.0-dev
+       #- libglib2.0-dev
     after: [desktop-gtk3]
