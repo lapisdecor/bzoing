@@ -2,7 +2,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import datetime
-import time
 import subprocess
 from . import share
 from pkg_resources import resource_filename
