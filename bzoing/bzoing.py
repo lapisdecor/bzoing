@@ -54,20 +54,20 @@ class BzoingMenu(Gtk.Menu):
         """
         Creates new task window
         """
-        alarm_window = setalarmwindow.SetAlarmWindow(self)
+        alarm_window = setalarmwindow.SetAlarmWindow()
 
 
     def see_tasks(self, widget):
         """
         Shows a window with all the tasks and alarms
         """
-        see_tasks_window = seetasks.SeeTasks(self)
+        see_tasks_window = seetasks.SeeTasks()
 
     def see_past_tasks(self, widget):
         """
         Shows a window with all the done tasks
         """
-        see_past_window = seetasks.SeePastTasks(self)
+        see_past_window = seetasks.SeePastTasks()
 
 
     def quit(self, widget):

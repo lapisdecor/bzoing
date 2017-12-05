@@ -10,7 +10,7 @@ from pkg_resources import resource_filename
 filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 class SeeTasks(Gtk.Window):
-    def __init__(self, parent):
+    def __init__(self):
         Gtk.Window.__init__(self, title='See Tasks')
         #Sets the position beginig with CENTER for non-supporting systems
         self.set_position(Gtk.WindowPosition.CENTER)
@@ -69,7 +69,7 @@ class SeeTasks(Gtk.Window):
 
 
 class SeePastTasks(Gtk.Window):
-    def __init__(self, parent):
+    def __init__(self):
         Gtk.Window.__init__(self, title='Past Tasks')
         #Sets the position beginig with CENTER for non-supporting systems
         self.set_position(Gtk.WindowPosition.CENTER)

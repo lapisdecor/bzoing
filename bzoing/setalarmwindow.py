@@ -11,7 +11,7 @@ from pkg_resources import resource_filename
 filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 class SetAlarmWindow(Gtk.Window):
-    def __init__(self, parent):
+    def __init__(self):
         Gtk.Window.__init__(self, title="Set Alarm")
         #Sets the position beginig with CENTER for non-supporting systems
         self.set_position(Gtk.WindowPosition.CENTER)
