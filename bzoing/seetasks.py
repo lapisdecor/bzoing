@@ -1,6 +1,9 @@
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
+
 from . import share
 from pkg_resources import resource_filename
 
@@ -9,6 +12,10 @@ filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 class SeeTasks(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='See Tasks')
+        #Sets the position beginig with CENTER for non-supporting systems
+        self.set_position(Gtk.WindowPosition.CENTER)
+        #self.set_gravity(Gdk.Gravity.NORTH_EAST)
+        self.move(Gdk.Screen.width() - self.get_size().width,0)
         self.set_icon_from_file(filepath)
         self.connect('destroy', self.quit_window)
 
@@ -64,6 +71,10 @@ class SeeTasks(Gtk.Window):
 class SeePastTasks(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='Past Tasks')
+        #Sets the position beginig with CENTER for non-supporting systems
+        self.set_position(Gtk.WindowPosition.CENTER)
+        #self.set_gravity(Gdk.Gravity.NORTH_EAST)
+        self.move(Gdk.Screen.width() - self.get_size().width,0)
         self.set_icon_from_file(filepath)
         box = Gtk.Box()
         box.set_orientation(Gtk.Orientation.VERTICAL)

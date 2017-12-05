@@ -2,4 +2,7 @@
 
 from bzoing import bzoing
 
-bzoing.start()
+if __name__ == '__main__':
+      import signal
+      signal.signal(signal.SIGINT, signal.SIG_DFL)
+      bzoing.start()

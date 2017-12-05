@@ -1,6 +1,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
+gi.require_version('Gdk', '3.0')
 from gi.repository import Gtk
+from gi.repository import Gdk
 import datetime
 import subprocess
 from . import share
@@ -11,6 +13,10 @@ filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 class SetAlarmWindow(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title="Set Alarm")
+        #Sets the position beginig with CENTER for non-supporting systems
+        self.set_position(Gtk.WindowPosition.CENTER)
+        #self.set_gravity(Gdk.Gravity.NORTH_EAST)
+        self.move(Gdk.Screen.width() - self.get_size().width,0)
 
         # set dialog measures and spacing
         #self.set_default_size(150, 100)
