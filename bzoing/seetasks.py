@@ -9,6 +9,7 @@ filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 class SeeTasks(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='See Tasks')
+        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_from_file(filepath)
         self.connect('destroy', self.quit_window)
 
@@ -64,6 +65,8 @@ class SeeTasks(Gtk.Window):
 class SeePastTasks(Gtk.Window):
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='Past Tasks')
+        self.set_position(Gtk.WindowPosition.CENTER)
+
         self.set_icon_from_file(filepath)
         box = Gtk.Box()
         box.set_orientation(Gtk.Orientation.VERTICAL)
