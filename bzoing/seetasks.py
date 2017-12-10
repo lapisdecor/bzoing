@@ -107,7 +107,7 @@ class SeePastTasks(Gtk.Window):
     def clear(self, widget):
         share.tasklist.clear_due_tasks()
         self.quit_window(self)
-        self.__init__(self)
+        self.__init__()
 
     def quit_window(self, window):
         self.destroy()
