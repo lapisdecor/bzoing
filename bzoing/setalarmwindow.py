@@ -40,10 +40,19 @@ class SetAlarmWindow(Gtk.Window):
         self.task_field = Gtk.Entry()
         box.add(self.task_field)
 
+        # Calculate the datetime for NOW + 5 minutes
+        localtime = datetime.datetime.now()
+        localtime_plus_5_min = localtime + datetime.timedelta(minutes=5)
+ 
         # create calendar
         self.cal = Gtk.Calendar()
         box.add(self.cal)
 
+        # Setting correct calendar date -> month is between 0 and 11
+        self.cal.select_day(localtime_plus_5_min.day)
+        self.cal.select_month(  localtime_plus_5_min.month - 1,
+                                localtime_plus_5_min.year )
+        
         # create time fields
         time_hbox = Gtk.HBox()
         hour_adjustment = Gtk.Adjustment(00, 00, 23, 1, 10, 0)
@@ -54,11 +63,10 @@ class SetAlarmWindow(Gtk.Window):
         self.minutes_field.set_adjustment(minute_adjustment)
         self.hours_field.connect('output', self.show_leading_zeros)
         self.minutes_field.connect('output', self.show_leading_zeros)
-        # Start with current_time + 1 hour
-        localtime = datetime.datetime.now()
-        localtime_plus_1_hour = localtime + datetime.timedelta(minutes=60)
-        self.hours_field.set_value(localtime_plus_1_hour.hour)
-        self.minutes_field.set_value(localtime_plus_1_hour.minute)
+        
+        # Setting correct time values
+        self.hours_field.set_value(localtime_plus_5_min.hour)
+        self.minutes_field.set_value(localtime_plus_5_min.minute)
 
         # creates a : separator between the two SpinButtons
         time_sep_label = Gtk.Label()
