@@ -31,6 +31,7 @@ parts:
     stage-packages:
        - libnotify-bin
        - python3-gi
+       - python3-xdg
        - libcanberra-gtk3-module
        - gir1.2-gtk-3.0
        - gir1.2-appindicator3-0.1
