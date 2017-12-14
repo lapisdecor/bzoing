@@ -24,10 +24,15 @@ Install bzoing
 
 .. code-block:: console
 
-      $ snap install --edge bzoing
+      $ sudo snap install bzoing
 
 start bzoing
 ------------
+
+You can search for bzoing on your desktop, you should see the bzoing icon.
+Just click it.
+
+If you wish you can also start bzoing from a terminal with:
 
 .. code-block:: console
 
