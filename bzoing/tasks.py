@@ -6,10 +6,10 @@ from bzoing.playme import Playme
 import time
 import threading
 import subprocess
+from xdg.BaseDirectory import save_data_path
 
-share_dir = os.path.expanduser('~/.local/share/bzoing')
-if not os.path.isdir(share_dir):
-    os.makedirs(share_dir)
+
+share_dir = save_data_path("bzoing")
 
 
 @total_ordering
