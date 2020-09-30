@@ -2,12 +2,12 @@
 bzoing
 ======
 
-.. image:: https://build.snapcraft.io/badge/lapisdecor/bzoing.svg
-  :target: https://build.snapcraft.io/user/lapisdecor/bzoing
-      :alt: Snap Status
+.. image:: https://snapcraft.io/bzoing/badge.svg
+  :target: https://snapcraft.io/bzoing
+     :alt: Snap Status
 
 .. image:: /bzoingdemo.png
-      :alt: bzoing demo
+     :alt: bzoing demo
 
 
 Bzoing provides a simple way to create task reminder alarms on your Gnu/Linux
