@@ -6,7 +6,9 @@ summary: Simple calendar alarms for your desktop
 description: |
   Bzoing provides a simple way to create task reminder alarms on your desktop
   using Python and Gtk3.
-
+architectures:
+  - amd64
+  - i386
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
