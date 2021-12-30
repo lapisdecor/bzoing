@@ -8,7 +8,6 @@ description: |
   using Python and Gtk3.
 architectures:
   - amd64
-  - i386
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
