@@ -13,8 +13,6 @@ bzoing
 Bzoing provides a simple way to create task reminder alarms on your Gnu/Linux
 desktop using Python and Gtk3.
 
-Bzoing is currently only tested on ubuntu on xorg.
-
 To use Bzoing you must:
 
 Install snapd if you don't already have it. (try snap --help)
