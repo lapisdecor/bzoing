@@ -19,6 +19,7 @@ parts:
     plugin: python
     stage-packages:
       - pulseaudio-utils
+      - xdg-user-dirs
     
 
 apps:
