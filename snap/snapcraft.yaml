@@ -20,7 +20,7 @@ parts:
     stage-packages:
       - xdg-user-dirs
       - python3-xdg
-      - pulsaudio-utils
+      - pulseaudio-utils
     
 
 apps:
