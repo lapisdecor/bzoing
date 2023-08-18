@@ -18,9 +18,9 @@ parts:
     source-type: git
     plugin: python
     stage-packages:
-      - pulseaudio-utils
       - xdg-user-dirs
       - python3-xdg
+      - pulsaudio-utils
     
 
 apps:
