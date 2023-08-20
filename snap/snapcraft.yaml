@@ -27,6 +27,8 @@ apps:
   bzoing:
     extensions: [gnome]
     command: bin/bzoing-now
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
     plugs:
       - unity7
       - pulseaudio
