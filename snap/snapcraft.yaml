@@ -21,7 +21,7 @@ parts:
       - xdg-user-dirs
       - python3-xdg
       - pulseaudio-utils
-      - libappindicator3-1
+      - gir1.2-appindicator3-0.1
     
 
 apps:
