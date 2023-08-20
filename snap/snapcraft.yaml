@@ -21,7 +21,7 @@ parts:
       - xdg-user-dirs
       - python3-xdg
       - pulseaudio-utils
-      - gir1.2-ayatanaappindicator3-0.1
+      - libayatana-appindicator3-1
     
 
 apps:
