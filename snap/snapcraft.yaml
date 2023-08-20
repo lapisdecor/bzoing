@@ -22,6 +22,7 @@ parts:
       - python3-xdg
       - pulseaudio-utils
       - libayatana-appindicator3-1
+      - libnotify-bin
     
 
 apps:
