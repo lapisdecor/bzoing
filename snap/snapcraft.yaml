@@ -22,6 +22,7 @@ parts:
       - python3-xdg
       - pulseaudio-utils
       - gir1.2-appindicator3-0.1
+      - libappindicator3-1
     
 
 apps:
