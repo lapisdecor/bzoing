@@ -12,8 +12,8 @@ from . import share
 import signal
 import sys
 
-gi.require_version('AppIndicator3', '0.1')
-from gi.repository import AppIndicator3 as appindicator
+gi.require_version('AyatanaAppIndicator3', '0.1')
+from gi.repository import AyatanaAppIndicator3 as appindicator
 
 import os
 import pickle
