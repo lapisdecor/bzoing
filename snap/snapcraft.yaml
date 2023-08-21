@@ -23,6 +23,7 @@ parts:
       - pulseaudio-utils
       - libayatana-appindicator3-1
       - libnotify-bin
+      - libcanberra-gtk3-module
     
 
 apps:
