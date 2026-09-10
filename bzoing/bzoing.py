@@ -1,109 +1,91 @@
 #!/usr/bin/env python3
 
-from bzoing.tasks import Bzoinq, Monitor
-import time
-
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
-from pkg_resources import resource_filename
-from . import share
-import signal
+import os
+import subprocess
 import sys
 
-gi.require_version('AyatanaAppIndicator3', '0.1')
-from gi.repository import AyatanaAppIndicator3 as appindicator
+import gi
+gi.require_version('Gtk', '4.0')
+from gi.repository import Gtk, Gio
 
-import os
-import pickle
+from . import share
+from .tasks import Bzoinq, Monitor
 from . import setalarmwindow
 from . import seetasks
 
 
-filepath = resource_filename(__name__, 'images/' + "sinoamarelo.svg")
-APPINDICATOR_ID = 'bzoing'
+APPLICATION_ID = 'com.gatochalupa.bzoing'
 
 
-class BzoingMenu(Gtk.Menu):
+class BzoingApplication(Gtk.Application):
     def __init__(self):
-        Gtk.Menu.__init__(self)
+        super().__init__(application_id=APPLICATION_ID)
+        self._tray = None
 
-        item_new_task = Gtk.MenuItem('New task')
-        item_new_task.connect('activate', self.new_task)
-        self.append(item_new_task)
+    def do_startup(self):
+        Gtk.Application.do_startup(self)
 
-        item_see_tasks = Gtk.MenuItem('See tasks')
-        item_see_tasks.connect('activate', self.see_tasks)
-        self.append(item_see_tasks)
+        new_task = Gio.SimpleAction(name='new-task')
+        new_task.connect('activate', self.new_task)
+        self.add_action(new_task)
 
-        item_see_past_tasks = Gtk.MenuItem("See past tasks")
-        item_see_past_tasks.connect('activate', self.see_past_tasks)
-        self.append(item_see_past_tasks)
+        see_tasks = Gio.SimpleAction(name='see-tasks')
+        see_tasks.connect('activate', self.see_tasks)
+        self.add_action(see_tasks)
 
-        item_separator = Gtk.SeparatorMenuItem()
-        self.append(item_separator)
+        see_past_tasks = Gio.SimpleAction(name='see-past-tasks')
+        see_past_tasks.connect('activate', self.see_past_tasks)
+        self.add_action(see_past_tasks)
 
-        item_quit = Gtk.MenuItem('Quit')
-        item_quit.connect('activate', self.quit)
-        self.append(item_quit)
+        quit_action = Gio.SimpleAction(name='quit')
+        quit_action.connect('activate', self.quit_app)
+        self.add_action(quit_action)
 
-        self.show_all()
+        self.hold()
 
-    def new_task(self, widget):
-        """
-        Creates new task window
-        """
-        alarm_window = setalarmwindow.SetAlarmWindow()
+    def do_activate(self):
+        if share.tasklist is None:
+            share.tasklist = Bzoinq()
+            self._monitor = Monitor(share.tasklist)
+            self._monitor.start()
+            self._start_tray()
 
+    def do_shutdown(self):
+        Gtk.Application.do_shutdown(self)
+        if share.tasklist is not None:
+            share.tasklist.save_tasks()
+        if getattr(self, '_monitor', None) is not None:
+            self._monitor.stop()
+        if self._tray is not None:
+            try:
+                self._tray.terminate()
+                self._tray.wait(timeout=5)
+            except Exception:
+                pass
 
-    def see_tasks(self, widget):
-        """
-        Shows a window with all the tasks and alarms
-        """
-        see_tasks_window = seetasks.SeeTasks()
+    def _start_tray(self):
+        tray_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tray.py')
+        self._tray = subprocess.Popen([sys.executable, tray_script])
 
-    def see_past_tasks(self, widget):
-        """
-        Shows a window with all the done tasks
-        """
-        see_past_window = seetasks.SeePastTasks()
+    def new_task(self, action, parameter):
+        window = setalarmwindow.SetAlarmWindow(self)
+        window.present()
 
+    def see_tasks(self, action, parameter):
+        window = seetasks.SeeTasks(self)
+        window.present()
 
-    def quit(self, widget):
-        Gtk.main_quit()
+    def see_past_tasks(self, action, parameter):
+        window = seetasks.SeePastTasks(self)
+        window.present()
 
+    def quit_app(self, action, parameter):
+        self.quit()
 
-class Gui:
-    def __init__(self):
-        self.indicator = appindicator.Indicator.new(APPINDICATOR_ID,
-                                           os.path.abspath(filepath),
-                                           appindicator.IndicatorCategory.APPLICATION_STATUS)
-        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
-        self.my_menu = BzoingMenu()
-        self.indicator.set_menu(self.my_menu)
 
 def start():
-
-    # start the tasklist (Bzoinq)
-    share.tasklist = Bzoinq()
-
-    # start the Monitor
-    my_monitor = Monitor(share.tasklist)
-    my_monitor.start()
-
-    # start the gui and pass tasklist to the gui so we can create tasks
-    # from the gui
-    gui = Gui()
-    Gtk.main()
-
-    # save tasks
-    share.tasklist.save_tasks()
-
-    # stop the monitor
-    my_monitor.stop()
-
-    # goodbye message
+    app = BzoingApplication()
+    app.run(sys.argv)
     print("Bye!")
 
 

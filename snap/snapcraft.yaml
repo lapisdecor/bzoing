@@ -1,21 +1,22 @@
 
 name: bzoing
-base: core22
+base: core24
 version: 'master'
 summary: Simple calendar alarms for your desktop
 description: |
   Bzoing provides a simple way to create task reminder alarms on your desktop
-  using Python and Gtk3.
-architectures:
-  - amd64
+  using Python and Gtk4.
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
 
 parts:
   bzoing:
-    source: https://github.com/lapisdecor/bzoing.git
-    source-type: git
+    source: .
     plugin: python
     stage-packages:
       - xdg-user-dirs
@@ -24,6 +25,18 @@ parts:
       - libayatana-appindicator3-1
       - libnotify-bin
       - libcanberra-gtk3-module
+    prime:
+      # The gnome extension runtime provides these; excluding avoids
+      # shadowing the newer gnome-platform libraries (e.g. harfbuzz
+      # missing hb_free breaks GTK4).
+      - -usr/lib/x86_64-linux-gnu/libgtk-3.so*
+      - -usr/lib/x86_64-linux-gnu/libgdk-3.so*
+      - -usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so*
+      - -usr/lib/x86_64-linux-gnu/libpango*.so*
+      - -usr/lib/x86_64-linux-gnu/libharfbuzz*.so*
+      - -usr/lib/x86_64-linux-gnu/libcairo*.so*
+      - -usr/lib/x86_64-linux-gnu/libfontconfig*.so*
+      - -usr/lib/x86_64-linux-gnu/libpixman-1.so*
     
 
 apps:
@@ -35,3 +48,9 @@ apps:
     plugs:
       - unity7
       - pulseaudio
+
+slots:
+  bzoing-dbus:
+    interface: dbus
+    bus: session
+    name: com.gatochalupa.bzoing

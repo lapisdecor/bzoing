@@ -187,7 +187,7 @@ class Monitor():
                         my_sound = Playme()
                         my_sound.play()
                     if task_list[0].notify:
-                        subprocess.Popen(['notify-send', current_desc])
+                        subprocess.Popen(['notify-send', '-a', 'Bzoing', current_desc])
 
                     # put due task in due_task_list
                     self.bzoinq_obj.due_task_list.append(task_list[0])

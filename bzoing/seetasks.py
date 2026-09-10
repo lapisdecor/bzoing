@@ -1,34 +1,26 @@
 import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('Gdk', '3.0')
+gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
-from gi.repository import Gdk
 
 from . import share
-from pkg_resources import resource_filename
 
-filepath = resource_filename(__name__, 'images/' + 'sinoamarelo.svg')
 
 class SeeTasks(Gtk.Window):
-    def __init__(self):
-        Gtk.Window.__init__(self, title='See Tasks')
-        #Sets the position beginig with CENTER for non-supporting systems
-        self.set_position(Gtk.WindowPosition.CENTER)
-        #self.set_gravity(Gdk.Gravity.NORTH_EAST)
-        self.move(Gdk.Screen.width() - self.get_size().width,0)
-        self.set_icon_from_file(filepath)
+    def __init__(self, application):
+        Gtk.Window.__init__(self, application=application, title='See Tasks')
         self.connect('destroy', self.quit_window)
 
-        box = Gtk.Box()
-        box.set_orientation(Gtk.Orientation.VERTICAL)
-        box.set_border_width(10)
-        box.set_spacing(6)
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        box.set_margin_top(10)
+        box.set_margin_bottom(10)
+        box.set_margin_start(10)
+        box.set_margin_end(10)
 
         self.store = Gtk.ListStore(str, str, str, bool)
         for task in share.tasklist.get_task_list():
-            treeiter = self.store.append([str(task.id), task.description, str(task.alarm), 0])
+            self.store.append([str(task.id), task.description, str(task.alarm), False])
 
-        tree = Gtk.TreeView(self.store)
+        tree = Gtk.TreeView.new_with_model(self.store)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Id", renderer, text=0)
         tree.append_column(column)
@@ -40,14 +32,12 @@ class SeeTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Delete", renderer, active=3)
         tree.append_column(column)
 
-        #path = Gtk.TreePath(0)
         renderer.connect('toggled', self.on_task_check)
 
-        box.add(tree)
-        self.add(box)
-        self.show_all()
+        box.append(tree)
+        self.set_child(box)
 
-    def on_task_check(self, something, path):
+    def on_task_check(self, renderer, path):
         # mark checkbox
         self.store[path][3] = not self.store[path][3]
 
@@ -69,24 +59,21 @@ class SeeTasks(Gtk.Window):
 
 
 class SeePastTasks(Gtk.Window):
-    def __init__(self):
-        Gtk.Window.__init__(self, title='Past Tasks')
-        #Sets the position beginig with CENTER for non-supporting systems
-        self.set_position(Gtk.WindowPosition.CENTER)
-        #self.set_gravity(Gdk.Gravity.NORTH_EAST)
-        self.move(Gdk.Screen.width() - self.get_size().width,0)
-        self.set_icon_from_file(filepath)
-        box = Gtk.Box()
-        box.set_orientation(Gtk.Orientation.VERTICAL)
-        box.set_border_width(10)
-        box.set_spacing(6)
-
+    def __init__(self, application):
+        Gtk.Window.__init__(self, application=application, title='Past Tasks')
         self.connect('destroy', self.quit_window)
+
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        box.set_margin_top(10)
+        box.set_margin_bottom(10)
+        box.set_margin_start(10)
+        box.set_margin_end(10)
+
         store = Gtk.ListStore(str, str, str)
         for task in share.tasklist.get_due_tasks():
-            treeiter = store.append([str(task.id), task.description, str(task.alarm)])
+            store.append([str(task.id), task.description, str(task.alarm)])
 
-        tree = Gtk.TreeView(store)
+        tree = Gtk.TreeView.new_with_model(store)
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn("Id", renderer, text=0)
         tree.append_column(column)
@@ -95,14 +82,13 @@ class SeePastTasks(Gtk.Window):
         column = Gtk.TreeViewColumn("Alarm", renderer, text=2)
         tree.append_column(column)
 
-        box.add(tree)
+        box.append(tree)
 
-        button = Gtk.Button("Clear and Close")
+        button = Gtk.Button(label="Clear and Close")
         button.connect('clicked', self.clear)
-        box.add(button)
+        box.append(button)
 
-        self.add(box)
-        self.show_all()
+        self.set_child(box)
 
     def clear(self, widget):
         share.tasklist.clear_due_tasks()
