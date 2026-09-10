@@ -11,7 +11,7 @@ bzoing
 
 
 Bzoing provides a simple way to create task reminder alarms on your Gnu/Linux
-desktop using Python and Gtk3.
+desktop using Python and Gtk4.
 
 To use Bzoing you must:
 
@@ -37,3 +37,15 @@ If you wish you can also start bzoing from a terminal with:
       $ bzoing
 
 You should see a yellow bell on your system tray. Click it to start using bzoing.
+
+Connect the required interfaces
+-------------------------------
+
+To allow alarms to play sound, connect the pulseaudio interface:
+
+.. code-block:: console
+
+      $ sudo snap connect bzoing:pulseaudio :pulseaudio
+
+The unity7 interface (needed for the system tray) is connected
+automatically; no other plugs require manual action.

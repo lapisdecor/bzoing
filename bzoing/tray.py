@@ -28,11 +28,13 @@ class BzoingTray:
 
     def build_menu(self):
         menu = Gtk.Menu()
+        menu.append(self._menu_item('Pizza (12 min)', 'pizza'))
         menu.append(self._menu_item('New task', 'new-task'))
         menu.append(self._menu_item('See tasks', 'see-tasks'))
         menu.append(self._menu_item('See past tasks', 'see-past-tasks'))
         menu.append(Gtk.SeparatorMenuItem())
         menu.append(self._menu_item('Quit', 'quit'))
+        menu.append(self._menu_item('Settings', 'settings'))
         menu.show_all()
         return menu
 

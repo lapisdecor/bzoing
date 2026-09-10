@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import datetime
 import os
 import subprocess
 import sys
@@ -12,6 +13,7 @@ from . import share
 from .tasks import Bzoinq, Monitor
 from . import setalarmwindow
 from . import seetasks
+from . import settingswindow
 
 
 APPLICATION_ID = 'com.gatochalupa.bzoing'
@@ -29,6 +31,10 @@ class BzoingApplication(Gtk.Application):
         new_task.connect('activate', self.new_task)
         self.add_action(new_task)
 
+        pizza_task = Gio.SimpleAction(name='pizza')
+        pizza_task.connect('activate', self.pizza_task)
+        self.add_action(pizza_task)
+
         see_tasks = Gio.SimpleAction(name='see-tasks')
         see_tasks.connect('activate', self.see_tasks)
         self.add_action(see_tasks)
@@ -36,6 +42,10 @@ class BzoingApplication(Gtk.Application):
         see_past_tasks = Gio.SimpleAction(name='see-past-tasks')
         see_past_tasks.connect('activate', self.see_past_tasks)
         self.add_action(see_past_tasks)
+
+        settings = Gio.SimpleAction(name='settings')
+        settings.connect('activate', self.show_settings)
+        self.add_action(settings)
 
         quit_action = Gio.SimpleAction(name='quit')
         quit_action.connect('activate', self.quit_app)
@@ -71,12 +81,21 @@ class BzoingApplication(Gtk.Application):
         window = setalarmwindow.SetAlarmWindow(self)
         window.present()
 
+    def pizza_task(self, action, parameter):
+        alarm = datetime.datetime.now() + datetime.timedelta(minutes=12)
+        share.tasklist.create_task(description="Pizza is ready", alarm=alarm)
+        share.tasklist.save_tasks()
+
     def see_tasks(self, action, parameter):
         window = seetasks.SeeTasks(self)
         window.present()
 
     def see_past_tasks(self, action, parameter):
         window = seetasks.SeePastTasks(self)
+        window.present()
+
+    def show_settings(self, action, parameter):
+        window = settingswindow.SettingsWindow(self)
         window.present()
 
     def quit_app(self, action, parameter):
