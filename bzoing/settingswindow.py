@@ -5,7 +5,10 @@ gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk
 
 
-AUTOSTART_PATH = os.path.expanduser('~/.config/autostart/bzoing.desktop')
+AUTOSTART_PATH = os.path.join(
+    os.environ.get('SNAP_USER_DATA', os.path.expanduser('~')),
+    '.config', 'autostart', 'bzoing.desktop',
+)
 
 DESKTOP_FILE = '''[Desktop Entry]
 Type=Application

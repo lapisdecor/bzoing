@@ -43,6 +43,7 @@ apps:
   bzoing:
     extensions: [gnome]
     command: bin/bzoing-now
+    autostart: bzoing.desktop
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3/dist-packages:$PYTHONPATH
     plugs:
